@@ -1,0 +1,18 @@
+var log                 = require('./libs/log')(module);
+var mongoose            = require('./libs/mongoose').mongoose;
+var UserModel           = require('./libs/mongoose').UserModel;
+var ClientModel         = require('./libs/mongoose').ClientModel;
+var DBHSP_GTRN002MB_Model     = require('./libs/mongoose').DBHSP_GTRN002MB_Model;
+var AccessTokenModel    = require('./libs/mongoose').AccessTokenModel;
+var RefreshTokenModel   = require('./libs/mongoose').RefreshTokenModel;
+var faker               = require('Faker');
+
+
+var chkPwd=db.getPassword("agalyadoss@gmail.com", "1qaz2wsx" );
+
+console.log("check Password" + chkPwd );
+
+
+setTimeout(function() {
+    mongoose.disconnect();
+}, 3000);

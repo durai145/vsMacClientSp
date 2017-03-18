@@ -1,0 +1,33 @@
+node: node: cannot execute [Exec format error]
+[31merror[39m: [libs/mongoose.js] connection error: failed to connect to [localhost:27017]
+server.sh: line 1: 10178: Killed
+
+events.js:72
+        throw er; // Unhandled 'error' event
+              ^
+Error: listen EADDRINUSE
+    at errnoException (net.js:904:11)
+    at Server._listen2 (net.js:1042:14)
+    at listen (net.js:1064:10)
+    at Server.listen (net.js:1138:5)
+    at Function.app.listen (/home/ubuntu/node/uss12.0.1/toauth2/NodeAPI/node_modules/express/lib/application.js:535:24)
+    at Object.<anonymous> (/home/ubuntu/node/uss12.0.1/toauth2/NodeAPI/server.js:157:5)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+
+events.js:72
+        throw er; // Unhandled 'error' event
+              ^
+Error: listen EADDRINUSE
+    at errnoException (net.js:904:11)
+    at Server._listen2 (net.js:1042:14)
+    at listen (net.js:1064:10)
+    at Server.listen (net.js:1138:5)
+    at Function.app.listen (/home/ubuntu/node/uss12.0.1/toauth2/NodeAPI/node_modules/express/lib/application.js:535:24)
+    at Object.<anonymous> (/home/ubuntu/node/uss12.0.1/toauth2/NodeAPI/server.js:157:5)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)

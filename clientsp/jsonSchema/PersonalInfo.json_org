@@ -1,0 +1,134 @@
+[{ 	 name     : "PersonalInformation "	
+										,label    : "Personal Information "	
+										,dataType : "SCHEMA"
+			                            ,childs   : 
+			                            [ 
+			                            {
+			                             name     : "BasicDetails"
+			                            ,label    : "Basic Details"	
+										,min      : 0
+			                            ,max      : "unlimited"
+										,dataType : "XMLCONTAINER"
+										,childs   :  [   
+										{
+										 name       : 'name'
+										,label      : 'name'
+										,group      : 'uss'
+										,task       : 'NONE'
+										,desc       : ''
+										,htmlType   : 'VARCHAR' 
+										,entitle    : 'READONLY' 
+										,enttlname  : ''
+										,mndf       : 'N'
+										,dataType   : 'VARCHAR'
+										,cclass     : 'ctable'
+										,validate   : ''
+										,dflt       : ''
+										,min        : '0'
+										,max        : '20'
+										,tips       : ''
+										,onkeyup    : 'onKeyUp(this);'
+										,onchange   : 'onChange(this);'
+										,onkeydown  : 'onKeyDown(this);'
+										,onkeypress : 'onKeyPress(this);'
+										,onclick    : 'onClick(this);'
+										,listVal    : '||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY'
+										,help       : 'N'
+										,helpLink   : 'helpload'
+										,xml        : 'N'
+										,Xpath      : '/'
+										} 
+										,  
+										{
+										 name       : 'Age'
+										,label      : 'Age'
+										,task       : 'NONE'
+										,group      : 'uss'
+										,desc       : ''
+										,htmlType   : 'VARCHAR' 
+										,entitle    : 'READONLY' 
+										,enttlname  : ''
+										,mndf       : 'N'
+										,dataType   : 'NUMBER'
+										,cclass     : 'ctable'
+										,validate   : ''
+										,dflt       : ''
+										,min        : '1'
+										,max        : '3'
+										,tips       : ''
+										,onkeyup    : 'onKeyUp(this);'
+										,onchange   : 'onChange(this);'
+										,onkeydown  : 'onKeyDown(this);'
+										,onkeypress : 'onKeyPress(this);'
+										,onclick    : 'onClick(this);'
+										,listVal    : '||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY'
+										,help       : 'N'
+										,helpLink   : 'helpload'
+										,xml        : 'N'
+										,Xpath      : '/'
+										 } 
+										 ,  
+										{
+										 name       : 'Mobile'
+										,label      : 'MobileNo'
+										,task       : 'NONE'
+										,group      : 'uss'
+										,desc       : ''
+										,htmlType   : 'VARCHAR' 
+										,entitle    : 'READONLY' 
+										,enttlname  : ''
+										,mndf       : 'N'
+										,dataType   : 'NUMBER'
+										,cclass     : 'ctable'
+										,validate   : ''
+										,dflt       : ''
+										,min        : '1'
+										,max        : '3'
+										,tips       : ''
+										,onkeyup    : 'onKeyUp(this);'
+										,onchange   : 'onChange(this);'
+										,onkeydown  : 'onKeyDown(this);'
+										,onkeypress : 'onKeyPress(this);'
+										,onclick    : 'onClick(this);'
+										,listVal    : '||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY'
+										,help       : 'N'
+										,helpLink   : 'helpload'
+										,xml        : 'N'
+										,Xpath      : '/'
+										 } 
+										,  
+										{ 
+										 name       : 'DOB'
+										,label      : 'Date of Birth'
+										,task       : 'NONE'
+										,group      : 'uss'
+										,desc       : ''
+										,htmlType   : 'VARCHAR' 
+										,entitle    : 'READONLY' 
+										,enttlname  : ''
+										,mndf       : 'N'
+										,dataType   : 'DATE'
+										,cclass     : 'ctable'
+										,validate   : ''
+										,dflt       : ''
+										,min        : '0'
+										,max        : '60'
+										,tips       : ''
+										,onkeyup    : 'onKeyUp(this);'
+										,onchange   : 'onChange(this);'
+										,onkeydown  : 'onKeyDown(this);'
+										,onkeypress : 'onKeyPress(this);'
+										,onclick    : 'onClick(this);'
+										,listVal    : '||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY'
+										,help       : 'N'
+										,helpLink   : 'helpload'
+										,xml        : 'N'
+										,Xpath      : '/' 
+										}
+										
+ ]
+										}
+
+
+]
+}];

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Streaming Example</title>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+</head>
+
+<body>
+	<div id="livestream"></div>
+	<script type="text/javascript" src="jquery.livestream.js"></script>
+	<script type="text/javascript">
+		(function($) {
+			 $(document).ready(function() {
+				 $('#livestream').livestream(['kokuei0133'], {
+						onSuccess: function(element, streamer) {
+							alert('success! streaming ' + streamer);
+						},
+						onFailure: function(element) {
+							alert('No streamers are online.');
+						}
+					});
+			});
+		})(jQuery);
+	</script>
+</body>
+</html>
