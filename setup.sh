@@ -12,3 +12,5 @@ npm install fs
 npm install mysql
 npm install log
 npm install cookie-parser
+npm install jsonwebtoken
+npm install bluebird
