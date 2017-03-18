@@ -1,1 +1,0 @@
-# ubuntuUss12

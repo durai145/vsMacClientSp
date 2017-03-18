@@ -14,3 +14,4 @@ npm install log
 npm install cookie-parser
 npm install jsonwebtoken
 npm install bluebird
+npm install winston

@@ -4,37 +4,26 @@ var bodyParser = require('body-parser');
 var requestIp = require('request-ip');
 var useragent = require('useragent');
 var geoip = require('geoip-lite');
-var cookieParser  = require('cookie-parser');
-
+var cookieParser = require('cookie-parser');
 var config = require('./config/config.json');
-var device     = require('express-device')
-var ms     = require('ms');
-
-var secretkey ="KEY1";
-var sessionExpSec =60*15;
-
+var device = require('express-device')
+var ms = require('ms');
 var jwt = require('jsonwebtoken');
-
-
- Promise = require('bluebird'),
- request = Promise.promisify(require('request'));
-
 var app = express();
-
 var https = require('https');
 var http = require('http');
 var fs = require('fs');
-
 var mysql = require('mysql');
-var pool  = mysql.createPool(config.mysql);
-
-/*--- Invoke DB --*/
-
-var idb=require('./idb/InvokeDB');
-var uss=require('./idb/USS_10');
+var pool = mysql.createPool(config.mysql);
+var idb = require('./idb/InvokeDB');
+var uss = require('./idb/USS_10');
 
 
 var log                 = require('./libs/log')(module);
+ Promise = require('bluebird'),
+ request = Promise.promisify(require('request'));
+var secretkey ="KEY1";
+var sessionExpSec =60*15;
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -1715,55 +1704,27 @@ function tokenSSO(req,res)
 	validInputSSO(req, function(req,respObj)
 	{
 		log.info("AF:001:validInput ");
-		//console.log(res.respObj);
 		
 		var options = {
-    method: 'POST',
-    uri: 'http://localhost:5000/gpasso/token',
-    form: {     		"grantType"     : "password" 
-          /*loginService.authorizeSSO({     "grantType"     : "password" */
-                      ,'clientId'    : req.getParam('clientId')
-                      ,'scope'       : req.getParam('scope')
-                      ,'username'    : req.getParam('username')
-                      ,'password'    : req.getParam('password')
-                      ,'redirectURI' : req.getParam('redirectURI')
-
-                      },
-    headers: respObj
-
+		    method: 'POST',
+		    uri: 'http://localhost:5000/gpasso/token',
+		    form: {            
+						"grantType"     : "password" 
+						,'clientId'    : req.getParam('clientId')
+						,'scope'       : req.getParam('scope')
+						,'username'    : req.getParam('username')
+						,'password'    : req.getParam('password')
+						,'redirectURI' : req.getParam('redirectURI')
+				},
+				headers: respObj
 		};
 
-
-console.log('after validInputSSO : options');
-console.log(options);
-
-	request(options)
-    .then(function (resp) {
-        // POST succeeded...
-        console.log("Success")
-        //console.log(body);
-
-        //"headers":
-//"x-powered-by": "Express"
-//"x-access-token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJIZWFlcmllIEdTTCIsImF1ZCI6Ind3dy5teXJvb21leHBlbnNlLmNvbSIsImlhdCI6IjkwMG1zIiwiZXhwIjoxNDY1NDA0NDIyfQ.xRXSM51FOtwcWX5keeIdZUIoYnOk1_P3pe3uIJoehzY"
-          //res.setHeader("x-access-token" , headers["x-access-token"]);
-          //console.log();
-         res.setHeader("x-access-token",resp.headers["x-access-token"]);
-        res.send(resp.body);
-      
-
-    })
-    .catch(function (err) {
-        // POST failed...
-
-        console.log(err);
-        res.send(err);
-    });
-	
-		
-
-
-	});
+		request(options).then(function (resp) {
+				res.send(resp.body);
+		}).catch(function (err) {
+				res.send(err);
+		});
+});
 
 
 
