@@ -15,3 +15,5 @@ npm install cookie-parser
 npm install jsonwebtoken
 npm install bluebird
 npm install winston
+npm install mongoose
+npm install nconf

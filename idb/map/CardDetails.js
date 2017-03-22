@@ -1,13 +1,6 @@
 /*--
 Blocks
 */
-var mysql = require('mysql');
-var poolGl  = mysql.createPool({
-  host     : 'localhost',
-  user     : 'u1021977_admin',
-  password : 'india' ,
-  database : 'DBHSP'
-});
 
 
 var log                 = require('../../libs/log')(module);
@@ -148,43 +141,16 @@ fieldObj.childs   = []	;
  }
 
 
-function getCardDetail( pool, inUsrId, inGrpId,callback)
- {
+function getCardDetail(inUsrId, inGrpId,callback) {
 
 
-
- 	poolGl.getConnection(function(err, connection) {
-
-var query='select CARD4  Card_Number ,  MIN_DUE_AMT Minimum_Due  , TTL_BAL Total_Balance,  DATE_FORMAT(DUE_DATE, \'%d-%m-%Y\')  Due_Date    from CARD001MB c WHERE  c.usr_id  = ' + connection.escape(inUsrId) +'';
-
-log.info(query);
-
-var queryRslt=connection.query(query,function(err, rows, fields) {
-
-	if(err)  callback(false,{"message" : err},rows);
-	rows= rows|| [];
-	if ( rows.length ==0 )
-	{
-		callback(false,{"message" : "Access Denied"},rows);
-	}
-	else
-	{
-		callback(true,fields,rows);
-	}
-});
-connection.release();
-
-});
- }
+}
 
 
 
 
-mandarayFieldCheck=function(schemaJson,dataJson,callback)
-{
-
+mandarayFieldCheck=function(schemaJson,dataJson,callback) {
 	console.log("I am in imandarayFieldCheck ");
-
 	return 0;
 
 }
@@ -199,12 +165,9 @@ exports.navi=function(inSchemaJsonUrl,inJson, callback)
 	console.log("CardDetail.navi");
 	var outSchemaJsonUrl=inSchemaJsonUrl;
 	var OutJson=inJson;
-	
-	
-	
 	callback(true,outSchemaJsonUrl,OutJson);
 }
-exports.crit=function(pool,inSchemaJsonUrl,inJson, callback)
+exports.crit=function(inSchemaJsonUrl,inJson, callback)
 {
 	console.log("CardDetail.crit");
 	var outSchemaJsonUrl=inSchemaJsonUrl;
@@ -221,7 +184,7 @@ exports.crit=function(pool,inSchemaJsonUrl,inJson, callback)
 var  respJson={outSchemaJson:'' ,OutJson:''};
 var	title="CardDetail";
 
-getCardDetail( pool,1, 1, function(status, respMessage,data)
+getCardDetail( 1, 1, function(status, respMessage,data)
 
 							{
 
