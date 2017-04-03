@@ -1,7 +1,7 @@
 /*
- 2013 copyright Heaerie Global Solutions Ltd. Vellore.
-  USS()
- @constructor
+2013 copyright Heaerie Global Solutions Ltd. Vellore.
+USS()
+@constructor
 
 */
 //alert("import USS start");
@@ -29,27 +29,22 @@ USS.prototype.initCapWord=function (s)
 USS.prototype.initCap=function (s)
 {
 
-	 var new_str = s.split(' '),
-        i,
-        arr = [];
-    for (i = 0; i < new_str.length; i++) {
-        arr +=this.initCapWord(new_str[i]);
-    }
-    return arr;
-	
-   // return s[0].toUpperCase() + s.slice(1);
+	var new_str = s.split(' '),
+	i,
+	arr = [];
+	for (i = 0; i < new_str.length; i++) {
+		arr +=this.initCapWord(new_str[i]);
+	}
+return arr;
 }
-
-
 
 USS.prototype.USSSetScript_= function()
 {
-return  USS.version;
+	return  USS.version;
 }
 
 USS.prototype.USSIncludeScript_=function(filename)
 {
-//	alert("Include 001");
 	try
 	{
 		if(arguments.length< 1)
@@ -61,28 +56,19 @@ USS.prototype.USSIncludeScript_=function(filename)
 		{
 			alert('SYS:USSIncludeScript_: filename is can be null');
 		}
-
 		var el = document.createElement('script');
-	//	el.src = this.resourcesPath + "/javascript/" + filename;
 		el.src =  "../javascript/" + filename;
-		//el.href = filename;
-	//	alert(" filename= <" +  filename + ">");
 		el.type = 'javascrupt';
-	//	el.rel = 'stylesheet';
 		document.getElementsByTagName('head').item(0).appendChild(el);
 	}
 	catch(e)
 	{
 		alert("APPUINLException:"+ e);
 	}
-
-//	alert("Include 002");
 }
-
 
 USS.prototype.USSIncludeLinks_=function(filename)
 {
-//	alert("Include 001");
 	try
 	{
 		if(arguments.length< 1)
@@ -94,11 +80,8 @@ USS.prototype.USSIncludeLinks_=function(filename)
 		{
 			alert('SYS:USSIncludeLinks_: filename is can be null');
 		}
-
 		var el = document.createElement('link');
-		//el.href = this.resourcesPath + "styles/" + filename;
 		el.href = filename;
-		//alert(" filename= <" +  filename + ">");
 		el.type = 'text/css';
 		el.rel = 'stylesheet';
 		document.getElementsByTagName('head').item(0).appendChild(el);
@@ -107,43 +90,40 @@ USS.prototype.USSIncludeLinks_=function(filename)
 	{
 		alert("APPUINLException:"+ e);
 	}
-
-	//alert("Include 002");
 }
 
 USS.prototype.USSField_=function()
 {
 
-this.group      = 'USS', /*it has been chabged by durai on 02-Feb-2010*/
-this.name       = '',
-this.label      = '',
-this.task       = 'NONE',
-this.desc       = '',
-this.htmlType   = 'text', /* newly introduced in USS05*/
-this.entitle    = 'READONLY'; // Editable /Readonly
-this.enttlname  = ''; //Entitle name to db
-this.mndf       = 'N',
-this.dataType   = 'VARCHAR',  // NUMBER/VARCHAR/DATE/EMAIL/AMOUNT/LIST/DIV/
-this.cclass     = 'ctable',   //
-this.parent     = '',
-this.validate   = '',
-this.dflt       = '',
-this.min        = '0',
-this.max        = '60',
-this.tips       = '',
-this.onkeyup    = 'onKeyUp(this);',
-this.onchange   = 'onChange(this);',
-this.onkeydown  = 'onKeyDown(this);',
-this.onkeypress = 'onKeyPress(this);',
-this.onclick    = 'onClick(this);',
-this.onblure    = 'onBlure(this);',
-this.listVal    = '||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY',
-this.help       = 'N',
-this.helpLink   = 'helpload',
-this.xml        = 'Y',
-this.xmlname    = '',
-this.Xpath      = '/'
-	
+	this.group      = 'USS', /*it has been chabged by durai on 02-Feb-2010*/
+	this.name       = '',
+	this.label      = '',
+	this.task       = 'NONE',
+	this.desc       = '',
+	this.htmlType   = 'text', /* newly introduced in USS05*/
+	this.entitle    = 'READONLY'; // Editable /Readonly
+	this.enttlname  = ''; //Entitle name to db
+	this.mndf       = 'N',
+	this.dataType   = 'VARCHAR',  // NUMBER/VARCHAR/DATE/EMAIL/AMOUNT/LIST/DIV/
+	this.cclass     = 'ctable',   //
+	this.parent     = '',
+	this.validate   = '',
+	this.dflt       = '',
+	this.min        = '0',
+	this.max        = '60',
+	this.tips       = '',
+	this.onkeyup    = 'onKeyUp(this);',
+	this.onchange   = 'onChange(this);',
+	this.onkeydown  = 'onKeyDown(this);',
+	this.onkeypress = 'onKeyPress(this);',
+	this.onclick    = 'onClick(this);',
+	this.onblure    = 'onBlure(this);',
+	this.listVal    = '||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY',
+	this.help       = 'N',
+	this.helpLink   = 'helpload',
+	this.xml        = 'Y',
+	this.xmlname    = '',
+	this.Xpath      = '/'
 }
 USS.prototype.USSCreareTab_=function()
 {
@@ -210,47 +190,33 @@ USS.prototype.USSCreateSession =function()
 	
 }
 
-
-
-
-//alert("import USS end");
-
 USS.prototype.USSCreateTable_=function()
 {
 	
-  this.ussTable = document.createElement("div");
-  this.ussTable.id = 'mainTable';
-  this.ussTable.className = 'container';
-  this.ussTable.border=0;
- // this.ussTable.style.display  = 'none'; 
- // this.ussTable.style.position = 'absolute'; 
- // this.ussTable.onclick = 'event.cancelBubble = true;';
- // this.ussTable.tabIndex = -1;
+	this.ussTable = document.createElement("div");
+	this.ussTable.id = 'mainTable';
+	this.ussTable.className = 'container';
+	this.ussTable.border=0;
+// this.ussTable.style.display  = 'none'; 
+// this.ussTable.style.position = 'absolute'; 
+// this.ussTable.onclick = 'event.cancelBubble = true;';
+// this.ussTable.tabIndex = -1;
 
 return this.ussTable;
-	
 }
-
 
 USS.prototype.USSAppendTableRow=function(USSTableRow,USSTable)
 {
 
-USSTable.appendChild(USSTableRow);
-
-return USSTable;
-	
+	USSTable.appendChild(USSTableRow);
+	return USSTable;
 }
 
 USS.prototype.USSAppendTableField=function(USSTableRow,USSTable)
 {
-
-USSTable.appendChild(USSTableRow);
-
+	USSTable.appendChild(USSTableRow);
 return USSTable;
-	
 }
-
-
 
 USS.prototype.USSCreateTableRow_=function()
 {
@@ -2025,6 +1991,3 @@ module.exports.frameField                    =ussModule.frameField;
 module.exports.frameGeneration               =ussModule.frameGeneration         ;
 module.exports.hasChild                      =ussModule.hasChild         ;
 module.exports.debug                      =ussModule.debug         ;
-
-
-//alert("import USS");

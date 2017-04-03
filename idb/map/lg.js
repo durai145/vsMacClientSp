@@ -1,10 +1,15 @@
-var log                 = require('../../libs/log')(module);
-var GPASSO_PROD001MT_Model   = require('../../mongoose/libs/gpassov3').GPASSO_PROD001MT_Model;
-var GPASSO_PRTL002MT_Model   = require('../../mongoose/libs/gpassov3').GPASSO_PRTL002MT_Model;
-var GPASSO_ROLE003MT_Model   = require('../../mongoose/libs/gpassov3').GPASSO_ROLE003MT_Model;
-var GPASSO_PGGR004MT_Model   = require('../../mongoose/libs/gpassov3').GPASSO_PGGR004MT_Model;
-var GPASSO_SSID003MT_Model   = require('../../mongoose/libs/gpassov3').GPASSO_SSID003MT_Model;
-var GPASSO_PAGE005MT_Model   = require('../../mongoose/libs/gpassov3').GPASSO_PAGE005MT_Model;
+var log                 = require('../libs/log')(module);
+var mongoose            = require('../libs/mongoose').mongoose;
+var UserModel           = require('../libs/mongoose').UserModel;
+var ClientModel         = require('../libs/mongoose').ClientModel;
+var AccessTokenModel    = require('../libs/mongoose').AccessTokenModel;
+var RefreshTokenModel   = require('../libs/mongoose').RefreshTokenModel;
+var GPASSO_PROD001MT_Model   = require('../libs/gpassov3').GPASSO_PROD001MT_Model;
+var GPASSO_PRTL002MT_Model   = require('../libs/gpassov3').GPASSO_PRTL002MT_Model;
+var GPASSO_ROLE003MT_Model   = require('../libs/gpassov3').GPASSO_ROLE003MT_Model;
+var GPASSO_PGGR004MT_Model   = require('../libs/gpassov3').GPASSO_PGGR004MT_Model;
+var GPASSO_SSID003MT_Model   = require('../libs/gpassov3').GPASSO_SSID003MT_Model;
+var GPASSO_PAGE005MT_Model   = require('../libs/gpassov3').GPASSO_PAGE005MT_Model;
 var ObjectId = mongoose.Types.ObjectId;
 
 

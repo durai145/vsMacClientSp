@@ -15,6 +15,7 @@ db.once('open', function callback () {
 
 var Schema = mongoose.Schema;
 
+
 /* Generated from GPASSOV004.sql by n.js  Don't change */
 /* All copyrights © 2016 Heaerie Global solutions (P) Ltd.India  */
  var GPASSO_PAGE005MT  = new Schema({

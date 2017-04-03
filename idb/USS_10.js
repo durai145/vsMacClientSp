@@ -1290,8 +1290,6 @@ USS.prototype.frameGenerationResoure= function (
 		}
 
 	}
-
-	
 	
 }
 catch(e)
@@ -1535,14 +1533,9 @@ USS.prototype.frameField=function (recSch,varStrVal,varLabelStrVal,varStrListVal
 	lv_str  += "\n USSField" + "." + "task"       + "=" + "'" + recSch.task       + "'" + ";"
 	lv_str  += "\n USSField" + "." + "desc"       + "=" + "'" + recSch.desc       + "'" + ";"
 	lv_str  += "\n USSField" + "." + "htmlType"   + "=" + "'" + recSch.htmlType   + "'" + ";"
-
-
-	if ( func == "Y" )
-	{
+	if ( func == "Y" ) {
 		lv_str  += "\n USSField" + "." + "entitle"    + "=" + "'" + recSch.entitle    + "'" + ";"
-	}
-	else
-	{
+	} else {
 		lv_str  += "\n USSField" + "." + "entitle"    + "=" + "'READONLY'" + ";"
 	}
 	lv_str  += "\n USSField" + "." + "enttlname"  + "=" + "'" + recSch.enttlname  + "'" + ";"

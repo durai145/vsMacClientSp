@@ -10,6 +10,7 @@ var device = require('express-device')
 var ms = require('ms');
 var jwt = require('jsonwebtoken');
 var app = express();
+var heaeriesjson = require("./uss/heaeriesjson");
 var https = require('https');
 var http = require('http');
 var fs = require('fs');
@@ -29,7 +30,7 @@ app.use(session({secret: 'glbladmin', resave: false, saveUninitialized: true}));
 var sess ;
 function dbError(err)
 {
-		console.log(err);
+	console.log(err);
 }
 
 app.all('*', function(req, res, next) {
@@ -150,69 +151,53 @@ app.post('/jsonSchema/:sjson' , function(req,res) {
 });
 
 function addCoreFunction(req,callback) {
-	req.getHeader=function(arg)
-	{
+	req.getHeader=function(arg) {
 		var retVal="";
-		try
-		{
+		try {
 			retVal=req.headers[arg]
-		}
-		catch(e)
-		{
+		} catch(e) {
 			retVal="";
 		}
 		return retVal;
 	}
-	req.setHeader=function(arg,value)
-	{
-		try
-		{
+	req.setHeader=function(arg,value) {
+		try {
 			req.headers[arg]=value;
-		}
-		catch(e)
-		{
+		} catch(e) {
 			retVal="";
 		}
 	}
-	req.getParam = function(arg)
-	{
+	req.getParam = function(arg) {
 		var retVal="";
-		if(req.method == "POST")
-		{
-			try
-			{
+		if(req.method == "POST") {
+			try {
 				retVal=req.params[arg] || req.body[arg]  ;	
-			}
-			catch(e)
-			{
+			} catch(e) {
 				retVal="";
 			}
-		}
-		else if (req.method == "GET")
-		{
-			try
-			{
+		} else if (req.method == "GET") {
+			try {
 				retVal=req.query[arg]  || req.body[arg];	
-			}
-			catch(e)
-			{
+			} catch(e) {
 				retVal="";
 			}
 		}
 		return retVal;
+	}
+	req.getMethod = function(arg) {
+		return req.method;
 	}
 	callback(req);
 }
 
-function validInput(req, callback)
-{
+function validInput(req, callback) {
 	addCoreFunction(req, function(req) {
-	var accessToken=req.getHeader("x-access-token");
-	var grantType=req.getParam("grantType");
-	var clientId=req.getParam("clientId");
-	var scope=req.getParam("scope");
-	var state =req.getHeader("user-agent");
-	var respObj= {
+	var accessToken = req.getHeader("x-access-token");
+	var grantType = req.getParam("grantType");
+	var clientId = req.getParam("clientId");
+	var scope = req.getParam("scope");
+	var state = req.getHeader("user-agent");
+	var respObj = {
 		respCode : 0
 		,respDescr : ""
 		,accessToken : accessToken
@@ -228,107 +213,85 @@ function validInput(req, callback)
 		,scope : ""
 		,state : ""
 	};
-	respObj.state=state;
-	if(respObj.accessToken != null)
-	{
+	respObj.state = state;
+	if(respObj.accessToken != null) {
 		respObj.isAccessTokenFound = true; 
 	}
-	if(grantType == "password")
-	{
+	if(grantType == "password") {
 		respObj.isValidGrantType = true;
 		respObj.grantType=grantType;
-	}
-	else
-	{
+	} else {
 		respObj.respCode=1;
 		respObj.grantType=grantType;
 		respObj.error="Invalid Grant Type";
 	}
-	if(clientId == "CLIENTSP")
-	{
+	if(clientId == "CLIENTSP") {
 		respObj.isClientIdFound = true;
 		respObj.clientId=clientId;
-	}
-	else
-	{
+	} else {
 		respObj.respCode=2;
 		respObj.clientId=clientId;
 		respObj.error="Invalid Client Id";
 	}
-	if(scope == "GSA")
-	{
+	if(scope == "GSA") {
 		respObj.isScopeFound = true;
 		respObj.SCOPE=scope;
-	}
-	else
-	{
+	} else {
 		respObj.respCode=3;
 		respObj.SCOPE=scope;
 		respObj.error="Invalid Scope";
 	}
 	callback(req,respObj);
-});
+	});
 }
 
 function authvalidInput(req,callback) {
-	addCoreFunction(req,function(req){
+	addCoreFunction(req,function(req) {
 	var accessToken=	req.getHeader("x-access-token");
 	var grantType=req.getParam("grantType");
 	var clientId=req.getParam("clientId");
 	var scope=req.getParam("scope");
 	var state =req.getHeader("user-agent");
-	var respObj= {
+	var respObj = {
 		respCode : 0
-		,respDescr :""
-		,accessToken :accessToken
-		,userName    :""
+		,respDescr : ""
+		,accessToken : accessToken
+		,userName : ""
 		,error : ""
 		,grantType : ""
 		,isAccessTokenFound : false
-		,clientId :""
+		,clientId : ""
 		,isClientIdFound: false
 		,isValidGrantType : false
 		,isScopeFound: false
-		,redirectURI :""
-		,scope:""
-		,state: ""
-	};
+		,redirectURI : ""
+		,scope: ""
+		,state: "" };
 	respObj.state=state;
-	if(respObj.accessToken != null)
-	{
+	if (respObj.accessToken != null) {
 		respObj.isAccessTokenFound = true; 
 	}
 	/*need To be introduce table*/
-	if(grantType == "password")
-	{
+	if (grantType == "password") {
 		respObj.isValidGrantType = true;
 		respObj.grantType=grantType;
-	}
-	else
-	{
+	} else {
 		respObj.respCode=1;
 		respObj.grantType=grantType;
 		respObj.error="Invalid Grant Type";
 	}
-	if(clientId == "CLIENTSP")
-	{
+	if (clientId == "CLIENTSP") {
 		respObj.isClientIdFound = true;
 		respObj.clientId=clientId;
-	}
-	else
-	{
-		
+	} else {
 		respObj.respCode=2;
 		respObj.clientId=clientId;
 		respObj.error="Invalid Client Id";
 	}
-	if(scope == "GSA")
-	{
-	respObj.isScopeFound = true;
-	respObj.SCOPE=scope;
-	}
-	else
-	{
+	if (scope == "GSA") {
+		respObj.isScopeFound = true;
+		respObj.SCOPE=scope;
+	} else {
 		respObj.respCode=3;
 		respObj.SCOPE=scope;
 		respObj.error="Invalid Scope";
@@ -340,7 +303,7 @@ function authvalidInput(req,callback) {
 
 function clientValidInput(req,callback)
 {
-	addCoreFunction(req,function(req){
+	addCoreFunction(req,function(req) {
 	var accessToken=	req.getHeader("x-access-token");
 	var grantType=req.getParam("grantType");
 	var clientId=req.getParam("clientId");
@@ -384,10 +347,8 @@ function clientValidInput(req,callback)
 	*/
 	if(clientId == "CLIENTSP")
 	{
-	 
-	 respObj.isClientIdFound = true;
-	 respObj.clientId=clientId;
-		
+		respObj.isClientIdFound = true;
+		respObj.clientId=clientId;
 	}
 	else
 	{
@@ -395,22 +356,16 @@ function clientValidInput(req,callback)
 		 respObj.clientId=clientId;
 		respObj.error="Invalid Client Id";
 	}
-	/*
-	if(scope == "GSA")
-	{
-	 respObj.isScopeFound = true;
-	 respObj.SCOPE=scope;
-		
-	}
-	else
-	{
+	/*[
+	if(scope == "GSA") {
+		respObj.isScopeFound = true;
+		respObj.SCOPE=scope;
+	} else {
 		respObj.respCode=3;
 		respObj.SCOPE=scope;
 		respObj.error="Invalid Scope";
 	}
-*/
-	//res.respObj= respObj;
-	log.info("in validate input :resp OBJ:")
+]*/
 	callback(req,respObj);
 	});
 }
@@ -422,23 +377,19 @@ function signToken(res,secretkey,callback)
 		,aud: "www.myroomexpense.com"
 		,iat: ms(sessionExpSec)
 		};
-//jwt.setExpiration(new Date().getTime() + ms(60));
-var token = jwt.sign(payload, secretkey,{complete: true, maxAge:ms(sessionExpSec), expiresInMinutes: sessionExpSec/60});
-	res.setHeader("x-access-token",token );
+var token = jwt.sign(payload, secretkey,{ complete: true, maxAge:ms(sessionExpSec), expiresInMinutes: sessionExpSec/60});
+	res.setHeader("x-access-token",token);
 	callback(res);
 }
 
 function verifyToken(accessToken,secretkey,callback)
 {
 	var rslt=false;
-	try
-	{
+	try {
 		log.info("in verifyToken");
 		var token = jwt.verify(accessToken,secretkey );
 		rslt=true;
-	}
-	catch(e)
-	{
+	} catch(e) {
 		rslt=false;
 		token={};
 	}
@@ -969,6 +920,53 @@ function genSchemaCollection(title,fields) {
 	return SchemaJson;
 }
 
+app.post('/service/:module/:task', function(req,res) {
+	addCoreFunction(req,function(req) {
+		var pageId="ServiceDetails";
+		var pageType='getServiceDetails';
+		var SchemaJson=[{"group":"USS","name":"ServiceDetails","label":"Basic Details","task":"ES","desc":"","htmlType":"PAGE","entitle":"NONREADONLY","enttlname":"","mndf":"N","dataType":"PAGE","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"0","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[{"group":"USS","name":"services","label":"Services","task":"NONE","desc":"","htmlType":"CONTAINER","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"CONTAINER","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"unlimited","col":"0","childs":[{"group":"USS","name":"resSjson","label":"Response schema json","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"unlimited","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]},{"group":"USS","name":"reqSjson","label":"Request schema json","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"unlimited","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]},{"group":"USS","name":"authReqd","label":"Request Schema Json","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]},{"group":"USS","name":"task","label":"Task","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]}]},{"group":"USS","name":"serviceName","label":"","task":"NONE","desc":"","htmlType":"CONTAINER","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"CONTAINER","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]}]}];
+		var DataJson=[{"ServiceDetails":[{"services":[{"resSjson":"Response schema json","reqSjson":"","authReqd":"", "task" : req.params.task }],"ServiceName":req.params.module}]}]
+
+
+		idb.InvokeDB(pageId,pageType,SchemaJson,DataJson,function(err, respSchemaJson, respDataJson) {
+
+			if (err) {
+				res.statusCode=404;										
+				return	res.send({errorDesc : "Request is not found"});
+			}
+			if (!heaeriesjson.valWithSch(respDataJson, respSchemaJson)) {
+				res.statusCode=501;										
+				res.send({errorDesc : "Internal Server Error"});
+				throw new Error("Response Schema Validation Failed");
+			}
+			
+//			console.log(respDataJson[0].ServiceDetails[0].services[0]);
+			
+			findService(respDataJson[0].ServiceDetails[0].services, req.params.task, req.getMethod(), function(err, currentService) {
+				if (err) {
+					res.statusCode=405;										
+//					log.error("Method is not found "+ req.params.module +  req.params.task);
+					return	res.send({errorDesc : "Method is not allowed"});
+				}
+				res.send({"ServiceDetails" : respDataJson[0].ServiceDetails});
+			});
+
+
+		});	
+	});
+
+});
+
+findService=function(services, task, method, callback) {
+	for(var i=0; i<services.length; i++) {
+		if( services[i].task == task) {
+		return callback(null, services[i]);
+		}
+	}
+	return callback(new Error("Task is not found :[" + task +"]"));
+	
+}
+
 app.post('/api/:module/:service', function(req,res) {
 	log.info("/api/" +req.params.module +"/"+ req.params.service );
 	if  (req.params.module  == 'signup') {
@@ -1047,7 +1045,7 @@ app.post('/api/:module/:service', function(req,res) {
 		}
 		break;	
 		case  'basicDet' :
-			console.log(req.params.service);
+		console.log(req.params.service);
 			switch (req.params.service) {
 				case  'Add' :
 					console.log(req.body.basicDet);
@@ -1091,7 +1089,7 @@ app.post('/api/:module/:service', function(req,res) {
 			} 
 		});
 	}
-})
+});
 console.log(__dirname);
 app.use(express.static(__dirname+'/public'));
 app.use(express.static(__dirname+'/mids'));

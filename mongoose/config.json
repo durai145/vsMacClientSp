@@ -4,6 +4,6 @@
         "tokenLife" : 3600
     },
     "mongoose": {
-        "uri": "mongodb://localhost/gpasso"
+        "uri": "mongodb://10.0.0.238/mailcsp"
     }
 }
