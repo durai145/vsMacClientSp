@@ -132,74 +132,79 @@ alert=function(str) {
 valWithSch = function (rec,recSch) {
 	for (var r=0; r<rec.length; r++) {
 		for (var s =0; s <recSch.length; s++) {
-		//	var varStr='rec['+ r + '].' + recSch[s].name;
-		//	var varStrVal= eval(varStr);
-			var	varStrVal=rec[r][recSch[s].name];
-			if ( recSch[s].dataType != "CONTAINER" || recSch[s].dataType != "PAGE" ) {
-			value = varStrVal;
-			if (value === undefined) {
-				value='';
-			}
-			if (recSch[s].childs === undefined) {
-				recSch[s].childs=new Array();
-			}
-			if (recSch[s].htmlType === undefined) {
-				recSch[s].htmlType='';
-			}
-			if (recSch[s].dataType === undefined) {
-				recSch[s].dataType='';
-			}
-			if (recSch[s].groupId === undefined) {
-				recSch[s].groupId='';
-			}
-			if(recSch[s].mndf == "Y") {
-				if (value == "") {
-					alert(recSch[s].name + " is mandatory: " + value);
-				return false;
+			var value=rec[r][recSch[s].name];
+			if ((recSch[s].dataType != "CONTAINER") || (recSch[s].dataType != "PAGE")) {
+				if (value === undefined) {
+					value=new String();
 				}
-			}
-			switch (recSch[s].dataType) {
-				case "DATE" : 
-					re = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
-					if((value != '') && (!value.match(re))) {
-						alert(recSch[s].name + "Invalid date format: " + value);
-						return false;
+				if (recSch[s].childs === undefined) {
+					recSch[s].childs=new Array();
 				}
-				break;
-				case "TIME" :
-					re = /^\d{1,2}:\d{2}([ap]m)?$/;
-					if(value != '' && !value.match(re)) {
-						alert(recSch[s].name +  "Invalid time format: " + value);
+				if (recSch[s].htmlType === undefined) {
+					recSch[s].htmlType= new String();
+				}
+				if (recSch[s].dataType === undefined) {
+					recSch[s].dataType = new String();
+				}
+				if (recSch[s].groupId === undefined) {
+					recSch[s].groupId = new String();
+				}
+				if(recSch[s].mndf == "Y") {
+					if (value == "") {
+						alert(recSch[s].name + " is mandatory: " + value);
 						return false;
 					}
-					break;
-					case "NUMBER" :
-					if (recSch[s].max != "unlimited") {
-						re = RegExp("^[0-9.]{"+ recSch[s].min + "," + recSch[s].max + "}$");
-						if(value != '' && !re.test(value)) {
-							alert( recSch[s].name + " Exceed  limit " + recSch[s].min + " to " + recSch[s].max );
+				}
+				switch (recSch[s].dataType) {
+					case "DATE" : 
+						re = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+						if((value != '') && (!value.match(re))) {
+							alert(recSch[s].name + "Invalid date format: " + value);
 							return false;
+						}
+						break;
+					case "TIME" :
+						re = /^\d{1,2}:\d{2}([ap]m)?$/;
+						if(value != '' && !value.match(re)) {
+							alert(recSch[s].name + " Invalid " + recSch[s].dataType + " format: " + value);
+							return false;
+						}
+						break;
+					case "NUMBER" :
+						if (recSch[s].max != "unlimited") {
+							re = RegExp("^[0-9.]{"+ recSch[s].min + "," + recSch[s].max + "}$");
+							if(value != '' && !re.test(value)) {
+								alert( recSch[s].name + " Exceed  limit " + recSch[s].min + " to " + recSch[s].max );
+								return false;
 							}
 						} else {
 							re =/^[A-Za-z0-9_]$/;
 							if(value != '' && !value.match(re)) {
-								alert( recSch[s].name + " Invalid time format: " + value);
+								alert( recSch[s].name + " Invalid " + recSch[s].dataType + " format: " + value);
 							return false;
 							}
 						}
 						break;
 					case "VARCHAR" :
 						if (recSch[s].max != "unlimited") {
-							re = RegExp("^[A-Za-z0-9_]{"+ recSch[s].min + "," + recSch[s].max + "}$");
+							re = RegExp("^[A-Za-z0-9_\\s]{"+ recSch[s].min + "," + recSch[s].max + "}$");
 							if(value != '' && !value.match(re)) {
-								alert(recSch[s].name +"Exceed  limit " + recSch[s].min + " to " + recSch[s].max +"[ " + value + "]" );
+								alert("Field Name:" +recSch[s].name + ", DataType :" + recSch[s].dataType + ", Exceed  limit " + recSch[s].min + " to " + recSch[s].max +"[" + value + "]" );
 								return false;
 							}
 						} else {
-							re =/^[A-Za-z0-9_]$/;
-							if((value != '') && (!value.match(re))) {
-								alert(recSch[s].name + "Invalid time format: " + value);
-								return false;
+							re =/^[A-Za-z0-9_\s]+$/;
+							if(typeof value == "object") {
+								try {
+									JSON.stringify(value);		
+								} catch(e) {
+									alert(recSch[s].name + " Invalid " + recSch[s].dataType + " format:[" + value +"] " + e);
+								}
+							} else {
+								if((value != "") && (!value.match(re))) {
+									alert(recSch[s].name + " Invalid " + recSch[s].dataType + " format:[" + value +"]");
+									return false;
+								}
 							}
 						} 
 						break;
@@ -215,20 +220,21 @@ valWithSch = function (rec,recSch) {
 								}
 							}
 							if (chk != 1) {
-								alert( recSch[s].name + " Invalid time format: " + value);
+								alert( recSch[s].name + " Invalid " + recSch[s].dataType + " format: " + value);
 								return false;
 							}
 						}
+					}
+				}
+				if (recSch[s].childs === undefined) {
+					recSch[s].childs=new Array();
+				}
+				if(valWithSch(value,recSch[s].childs) == false) {
+					alert( "Failed at child validation of " + recSch[s].name);
+					return false;
 				}
 			}
-			if (recSch[s].childs === undefined) {
-				recSch[s].childs=new Array();
-			}
-			if(valWithSch(varStrVal,recSch[s].childs) == false) {
-				return false;
-			}
 		}
-	}
 	return true;
 }
 

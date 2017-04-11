@@ -129,10 +129,13 @@ alert=function(str) {
 	console.log(str);
 }
 
-valWithSch = function (rec,recSch) {
+valWithSch = function (rec, recSch) {
 	for (var r=0; r<rec.length; r++) {
-		for (var s =0; s <recSch.length; s++) {
+			
+		for (var s =0; s<recSch.length; s++) {
+		//	console.log("s = %d , Max = %d ", s , recSch.length);
 			var value=rec[r][recSch[s].name];
+//			console.log("r = %d , rec[%d] = %s , s=%d recSch[%d].name= %s , value = %s rec[%d][recSch[%d].name] " ,r, r, rec[r], s, s, recSch[s].name , value , value , r, s );
 			if ((recSch[s].dataType != "CONTAINER") || (recSch[s].dataType != "PAGE")) {
 				if (value === undefined) {
 					value=new String();
@@ -151,46 +154,40 @@ valWithSch = function (rec,recSch) {
 				}
 				if(recSch[s].mndf == "Y") {
 					if (value == "") {
-						alert(recSch[s].name + " is mandatory: " + value);
-						return false;
+						return new Error(recSch[s].name + " is mandatory: [" + value +"]")
 					}
 				}
 				switch (recSch[s].dataType) {
 					case "DATE" : 
 						re = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
 						if((value != '') && (!value.match(re))) {
-							alert(recSch[s].name + "Invalid date format: " + value);
-							return false;
+							return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
 						}
 						break;
 					case "TIME" :
 						re = /^\d{1,2}:\d{2}([ap]m)?$/;
 						if(value != '' && !value.match(re)) {
-							alert(recSch[s].name + " Invalid " + recSch[s].dataType + " format: " + value);
-							return false;
+							return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
 						}
 						break;
 					case "NUMBER" :
 						if (recSch[s].max != "unlimited") {
 							re = RegExp("^[0-9.]{"+ recSch[s].min + "," + recSch[s].max + "}$");
 							if(value != '' && !re.test(value)) {
-								alert( recSch[s].name + " Exceed  limit " + recSch[s].min + " to " + recSch[s].max );
-								return false;
+								return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
 							}
 						} else {
 							re =/^[A-Za-z0-9_]$/;
 							if(value != '' && !value.match(re)) {
-								alert( recSch[s].name + " Invalid " + recSch[s].dataType + " format: " + value);
-							return false;
+								return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
 							}
 						}
 						break;
 					case "VARCHAR" :
 						if (recSch[s].max != "unlimited") {
-							re = RegExp("^[A-Za-z0-9_\s]{"+ recSch[s].min + "," + recSch[s].max + "}$");
+							re = RegExp("^[A-Za-z0-9_\\s]{"+ recSch[s].min + "," + recSch[s].max + "}$");
 							if(value != '' && !value.match(re)) {
-								alert(recSch[s].name +"Exceed  limit " + recSch[s].min + " to " + recSch[s].max +"[ " + value + "]" );
-								return false;
+								return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
 							}
 						} else {
 							re =/^[A-Za-z0-9_\s]+$/;
@@ -198,12 +195,11 @@ valWithSch = function (rec,recSch) {
 								try {
 									JSON.stringify(value);		
 								} catch(e) {
-									alert(recSch[s].name + " Invalid " + recSch[s].dataType + " format:[" + value +"] " + e);
+									return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
 								}
 							} else {
 								if((value != "") && (!value.match(re))) {
-									alert(recSch[s].name + " Invalid " + recSch[s].dataType + " format:[" + value +"]");
-									return false;
+									return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
 								}
 							}
 						} 
@@ -220,8 +216,7 @@ valWithSch = function (rec,recSch) {
 								}
 							}
 							if (chk != 1) {
-								alert( recSch[s].name + " Invalid " + recSch[s].dataType + " format: " + value);
-								return false;
+								return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " value : [" + value + "]");
 							}
 						}
 					}
@@ -229,13 +224,13 @@ valWithSch = function (rec,recSch) {
 				if (recSch[s].childs === undefined) {
 					recSch[s].childs=new Array();
 				}
-				if(valWithSch(value,recSch[s].childs) == false) {
-					alert( "Failed at child validation of " + recSch[s].name);
-					return false;
+				var err=valWithSch(value, recSch[s].childs);
+				if (err)  {
+					return err;
 				}
 			}
 		}
-	return true;
+		return null;
 }
 
 exports.valWithSch=valWithSch;

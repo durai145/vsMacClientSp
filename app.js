@@ -404,7 +404,6 @@ function token(req,res)
 	log.info("in token :001");
 	var successRespObj={
 		token_type:"jwt"
-
 	};
 	var errorArr=[
 	"invalid_request"
@@ -593,12 +592,11 @@ function tokenSSO(req,res)
 		,error_uri:""
 	};
 	log.info("in token :002");
-	validInputSSO(req, function(req,respObj)
-	{
+	validInputSSO(req, function(req,respObj) {
 		log.info("AF:001:validInput ");
 		var options = {
 			method: 'POST',
-			uri: 'http://localhost:5000/gpasso/token',
+			uri: 'http://localhost:' + config.port + '/gpasso/token',
 			form: {            
 						"grantType"     : "password" 
 						,'clientId'    : req.getParam('clientId')
@@ -609,12 +607,18 @@ function tokenSSO(req,res)
 				},
 			headers: respObj
 		};
+		console.log(options);
+		log.info("call request");
 		request(options).then(function (resp) {
+			log.info("call resp:", resp);
 			res.send(resp.body);
 		}).catch(function (err) {
+			log.info("call err:", err);
 			res.send(err);
 		});
+		log.info("after request");
 	});
+	log.info("in token :004");
 }
 
 function authorize(req,res)
@@ -765,8 +769,7 @@ app.post('/gpasso/authorize' , function(req,res) {
 
 
 
-function clientVerifyToken(req,res,next)
-{
+function clientVerifyToken(req,res,next) {
 	log.info("in token");
 	var successRespObj={
 		token_type:"jwt"
@@ -920,52 +923,115 @@ function genSchemaCollection(title,fields) {
 	return SchemaJson;
 }
 
-app.post('/service/:module/:task', function(req,res) {
+
+
+serviceHandler=function(req,res) {
 	addCoreFunction(req,function(req) {
 		var pageId="ServiceDetails";
 		var pageType='getServiceDetails';
 		var SchemaJson=[{"group":"USS","name":"ServiceDetails","label":"Basic Details","task":"ES","desc":"","htmlType":"PAGE","entitle":"NONREADONLY","enttlname":"","mndf":"N","dataType":"PAGE","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"0","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[{"group":"USS","name":"services","label":"Services","task":"NONE","desc":"","htmlType":"CONTAINER","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"CONTAINER","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"unlimited","col":"0","childs":[{"group":"USS","name":"resSjson","label":"Response schema json","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"unlimited","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]},{"group":"USS","name":"reqSjson","label":"Request schema json","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"unlimited","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]},{"group":"USS","name":"authReqd","label":"Request Schema Json","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]},{"group":"USS","name":"task","label":"Task","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]}]},{"group":"USS","name":"serviceName","label":"","task":"NONE","desc":"","htmlType":"CONTAINER","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"CONTAINER","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]}]}];
 		var DataJson=[{"ServiceDetails":[{"services":[{"resSjson":"Response schema json","reqSjson":"","authReqd":"", "task" : req.params.task }],"ServiceName":req.params.module}]}]
-
-
 		idb.InvokeDB(pageId,pageType,SchemaJson,DataJson,function(err, respSchemaJson, respDataJson) {
-
 			if (err) {
-				res.statusCode=404;										
+				res.statusCode=404;
 				return	res.send({errorDesc : "Request is not found"});
 			}
 			if (!heaeriesjson.valWithSch(respDataJson, respSchemaJson)) {
-				res.statusCode=501;										
+				res.statusCode=501;
 				res.send({errorDesc : "Internal Server Error"});
 				throw new Error("Response Schema Validation Failed");
 			}
-			
-//			console.log(respDataJson[0].ServiceDetails[0].services[0]);
-			
+			log.info("findService", respDataJson[0].ServiceDetails[0].services, req.params.task, req.getMethod());
 			findService(respDataJson[0].ServiceDetails[0].services, req.params.task, req.getMethod(), function(err, currentService) {
 				if (err) {
-					res.statusCode=405;										
-//					log.error("Method is not found "+ req.params.module +  req.params.task);
+					res.statusCode=405;
 					return	res.send({errorDesc : "Method is not allowed"});
 				}
 				res.send({"ServiceDetails" : respDataJson[0].ServiceDetails});
 			});
-
-
 		});	
 	});
-
-});
+}
 
 findService=function(services, task, method, callback) {
-	for(var i=0; i<services.length; i++) {
-		if( services[i].task == task) {
+	for (var i=0; i<services.length; i++) {
+		if ((services[i].task == task) && (services[i].method == method)) {
 		return callback(null, services[i]);
 		}
 	}
 	return callback(new Error("Task is not found :[" + task +"]"));
 	
 }
+
+function validateHeader(req,callback) {
+
+	var accessToken=req.getHeader("x-access-token");
+	var grantType=req.getParam("grantType");
+	var clientId=req.getParam("clientId");
+	var scope=req.getParam("scope");
+	var state =req.getHeader("user-agent");
+	var respObj= {
+		respCode : 0
+		,respDescr :""
+		,accessToken :accessToken
+		,userName    :""
+		,error : ""
+		,grantType : true
+		,isAccessTokenFound : true
+		,clientId :""
+		,isClientIdFound: false
+		,isValidGrantType : true
+		,isScopeFound: true
+		,redirectURI :""
+		,scope:""
+		,state: ""
+	};
+	respObj.state=state;
+	if(respObj.accessToken != null)
+	{
+		respObj.isAccessTokenFound = true; 
+	}
+	/*need To be introduce table*/
+    /*
+	if(grantType == "password")
+	{
+	 respObj.isValidGrantType = true;
+	 respObj.grantType=grantType;
+		
+	}
+	else
+	{
+		respObj.respCode=1;
+		respObj.grantType=grantType;
+		respObj.error="Invalid Grant Type";
+	}
+	*/
+	if(clientId == "CLIENTSP")
+	{
+		respObj.isClientIdFound = true;
+		respObj.clientId=clientId;
+	}
+	else
+	{
+		respObj.respCode=2;
+		respObj.clientId=clientId;
+		respObj.error="Invalid Client Id";
+	}
+	/*[
+	if(scope == "GSA") {
+		respObj.isScopeFound = true;
+		respObj.SCOPE=scope;
+	} else {
+		respObj.respCode=3;
+		respObj.SCOPE=scope;
+		respObj.error="Invalid Scope";
+	}
+	]*/
+	callback(req,respObj);
+}
+
+app.post('/service/:module/:task', serviceHandler);
+app.get('/service/:module/:task', serviceHandler);
 
 app.post('/api/:module/:service', function(req,res) {
 	log.info("/api/" +req.params.module +"/"+ req.params.service );
@@ -1093,6 +1159,6 @@ app.post('/api/:module/:service', function(req,res) {
 console.log(__dirname);
 app.use(express.static(__dirname+'/public'));
 app.use(express.static(__dirname+'/mids'));
-var server = app.listen(5000, function() {
+var server = app.listen(config.port, function() {
 	console.log('Listening on port %d', server.address().port);
 });
