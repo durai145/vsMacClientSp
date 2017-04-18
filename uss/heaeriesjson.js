@@ -38,7 +38,7 @@ expandDataType= function(sjson, ns ) {
 				found = true;
 			} else {
 				ns.forEach(function(nameSpaceObj) {
-				console.log(" nameSpaceObj.name  = %s , dataObj.namespace = %s ", nameSpaceObj.name, dataObj.namespace );
+//				console.log(" nameSpaceObj.name  = %s , dataObj.namespace = %s ", nameSpaceObj.name, dataObj.namespace );
 				if (nameSpaceObj.name == dataObj.namespace ) {
 					if ( hasChild( nameSpaceObj)) {
 							nameSpaceObj.childs.forEach( function(packageObj) {
@@ -128,7 +128,10 @@ validateUssField= function(field) {
 alert=function(str) {
 	console.log(str);
 }
-
+//TODO: need to handle the structure inside structure.
+// type struct node {
+//       test node 
+//        };
 valWithSch = function (rec, recSch) {
 	for (var r=0; r<rec.length; r++) {
 			
