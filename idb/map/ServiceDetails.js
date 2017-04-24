@@ -1,5 +1,6 @@
 var log                 = require('../libs/log')(module);
 var mongoose            = require('../libs/gpassov3').mongoose;
+var ErrorResponseSchema = require('../../jsonSchema/ErrorResponseSchema.json');
 var GPASSO_PROD001MT_Model   = require('../libs/gpassov3').GPASSO_PROD001MT_Model;
 var GPASSO_SRVS006MT_Model   = require('../libs/gpassov3').GPASSO_SRVS006MT_Model;
 var GPASSO_PRTL002MT_Model   = require('../libs/gpassov3').GPASSO_PRTL002MT_Model;
@@ -43,25 +44,22 @@ exports.getServiceDetails=function(inSchema, inJson, callback) {
 }
 
 exports.saveServiceDetails=function(inSchema,inJson,callback) {
+	//[{"ServiceDetails":[{"services":[{"resSjson":resSchema,"reqSjson": reqSchema,"authReqd": false ,"task":"doLogin"}],"serviceName":"loginDetails"}]}]
 	var service = new GPASSO_SRVS006MT_Model({
-	  services: [{
-		method: "POST"
-		, authReqd: false
-		, task: "getUserDetails"
-		, reqSjson: [{"name" : "test"}]
-		, resSjson: [{"name" : "test"}]
-		}],
-	  serviceName: 'UserDetails',
+	  services: inJson[0].ServiceDetails[0].services,
+	  serviceName: inJson[0].ServiceDetails[0].serviceName,
 	  dtModified: new Date(),
 	  athId: 1,
 	  dtCreated: new Date(),
 	  mkrId: null});
 	service.save(function(err) {
 		if(err) {
-			log.error("unable to save service:" + JSON.stringify(service) + " , error Object: " + JSON.stringify(err));
-			return	callback && callback(null,[], []);
+			log.error("unable to save service: ", err);
+			//return	callback && callback(new Error("unable to save service:" + JSON.stringify(service) + " , error Object: " + JSON.stringify(err)),[], []);
+			return	callback && callback(null, ErrorResponseSchema, [{"ErrorResponse":[{"status":[{"responseCode":"001","responseDesc":"unable to save to database"}]}]}]);
 		}
 		console.log(service);
+		return	callback && callback(null,ErrorResponseSchema, [{"ErrorResponse":[{"status":[{"responseCode":"000","responseDesc":"Successfully savedss"}]}]}]);
 		console.log(" Successfully saved");
 		
 	});

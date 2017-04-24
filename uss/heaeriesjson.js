@@ -5,7 +5,7 @@ lgns.forEach(function(lgnsObj) {
 	ns.push(lgnsObj);
 });
 
-expandDataType= function(sjson, ns ) {
+expandDataType = function(sjson, ns) {
 	var rtObj= new Array();
 	sjson.forEach( function(sjsonObj) {
 		var rpObj= {};
@@ -42,27 +42,27 @@ expandDataType= function(sjson, ns ) {
 				if (nameSpaceObj.name == dataObj.namespace ) {
 					if ( hasChild( nameSpaceObj)) {
 							nameSpaceObj.childs.forEach( function(packageObj) {
-							if ( dataObj.package  ==  packageObj.name )  {
-								if( hasChild(packageObj)) {
-									packageObj.childs.forEach( function(dataType) {
-										if(dataType.name == dataObj.dataType) {
-											rpObj=copyObject(sjsonObj,dataType);
-											found = true;
-										}
-									});
+								if ( dataObj.package  ==  packageObj.name )  {
+									if( hasChild(packageObj)) {
+										packageObj.childs.forEach( function(dataType) {
+											if(dataType.name == dataObj.dataType) {
+												rpObj=copyObject(sjsonObj,dataType);
+												found = true;
+											}
+										});
+									}
 								}
-							}
-						});
+							});
+						}
 					}
-				}
-			});
-		}
-		if ( found ) {
-			rtObj.push(rpObj);
-		} else {
-			rtObj.push(sjsonObj);
-		}
-	});
+				});
+			}
+			if (found) {
+				rtObj.push(rpObj);
+			} else {
+				rtObj.push(sjsonObj);
+			}
+		});
 	return rtObj;
 }
 
@@ -132,14 +132,68 @@ alert=function(str) {
 // type struct node {
 //       test node 
 //        };
+
+getJsonKeys = function(json)  {
+	var keys = new Array();
+	for(var key in json) {
+		keys.push(key);	
+	}
+	return keys;
+}
+
+getJsonKeysFromSchema = function(sjson) {
+	var skeys = new Array();
+	sjson.forEach(function(sobj) {
+		skeys.push(sobj.name)
+	});
+	return skeys;
+}
+
+hasValidKeys  = function(recKeys, recSchKeys) {
+	var rtObj = null;
+	recKeys.forEach(function(key) {
+		if(!recSchKeys.some(function (schKey) { return schKey == key; })) {
+			rtObj = new Error("Unkown Key: " + key + " is not defined on Schema Keys " + JSON.stringify(recSchKeys));
+		}
+	});
+	return rtObj;
+
+}
+
+hasParent = function(schObj) {
+	return (["PAGE", "COLLECTIONS", "CONTAINER"].some(function(elem) { console.log(elem + "==" + schObj.dataType); return elem==schObj.dataType;}));
+};
+
+
 valWithSch = function (rec, recSch) {
+
+/* is valid Schema ?*/
+/* is valid Json ?*/
+//	console.error("rec= " + JSON.stringify(rec));
+//	console.error("recSch= " + JSON.stringify(recSch));
+	var recSchKeys = getJsonKeysFromSchema(recSch);
 	for (var r=0; r<rec.length; r++) {
-			
 		for (var s =0; s<recSch.length; s++) {
-		//	console.log("s = %d , Max = %d ", s , recSch.length);
-			var value=rec[r][recSch[s].name];
-//			console.log("r = %d , rec[%d] = %s , s=%d recSch[%d].name= %s , value = %s rec[%d][recSch[%d].name] " ,r, r, rec[r], s, s, recSch[s].name , value , value , r, s );
-			if ((recSch[s].dataType != "CONTAINER") || (recSch[s].dataType != "PAGE")) {
+
+		var value=rec[r][recSch[s].name];
+		if (hasParent(recSch[s])) {
+			if (typeof recSch[s].childs != "Array") {
+				recSch[s].childs=new Array();
+			}
+			if (typeof value != "Array") {
+				return new Error("Expected Array Obj for " + recSch[s].name);
+			}
+			
+			var err=valWithSch(value, recSch[s].childs);
+			if (err)  {
+				return err;
+			}
+			var rtErr = hasValidKeys(getJsonKeys(rec[r]), recSchKeys);
+			if (rtErr) {
+				return rtErr;
+			}
+		
+		} else  {
 				if (value === undefined) {
 					value=new String();
 				}
@@ -213,23 +267,13 @@ valWithSch = function (rec, recSch) {
 						if (value != '') {
 							var inpStrArr= recSch[s].listVal.split('|');
 							var chk=0;
-							for(var i = 0;i < inpStrArr.length; i += 2) {
-								if( value == inpStrArr[i]) {
-								chk=1;
-								}
-							}
-							if (chk != 1) {
-								return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " value : [" + value + "]");
+							var values = new Array();
+							inpStrArr.forEach(function(obj, index) { if (index%2 == 1) { values.push(obj)} });
+							if (!values.some(function(elem) {  return elem == value; }))	 {
+								return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " value : [" + value + "] expected: " + JSON.stringify(values));
 							}
 						}
 					}
-				}
-				if (recSch[s].childs === undefined) {
-					recSch[s].childs=new Array();
-				}
-				var err=valWithSch(value, recSch[s].childs);
-				if (err)  {
-					return err;
 				}
 			}
 		}
