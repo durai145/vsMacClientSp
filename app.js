@@ -17,6 +17,11 @@ var fs = require('fs');
 var idb = require('./idb/InvokeDB');
 var uss = require('./idb/USS_10');
 var log = require('./libs/log')(module);
+
+var AuthorizationFailure = require("./libs/error/AuthorizationFailure");
+var TaskNotFound = require("./libs/error/TaskNotFound");
+var MethodIsNotFound = require("./libs/error/MethodIsNotFound");
+
 Promise = require('bluebird'),
 request = Promise.promisify(require('request'));
 var secretkey = "KEY1";
@@ -369,6 +374,61 @@ function clientValidInput(req,callback)
 	callback(req,respObj);
 	});
 }
+
+function clientParamInput(req,callback)
+{
+	var accessToken=	req.getHeader("x-access-token");
+	var grantType=req.getParam("grantType");
+	var clientId=req.getParam("clientId");
+	var scope=req.getParam("scope");
+	var state =req.getHeader("user-agent");
+	var respObj= {
+		respCode : 0
+		,respDescr :""
+		,accessToken :accessToken
+		,userName    :""
+		,error : ""
+		,grantType : true
+		,isAccessTokenFound : true
+		,clientId :""
+		,isClientIdFound: false
+		,isValidGrantType : true
+		,isScopeFound: true
+		,redirectURI :""
+		,scope:""
+		,state: ""
+	};
+	respObj.state=state;
+	if(respObj.accessToken != null)
+	{
+		respObj.isAccessTokenFound = true; 
+	}
+	/*need To be introduce table*/
+
+	if (grantType == "password") {
+	 respObj.isValidGrantType = true;
+	 respObj.grantType=grantType;
+	} else {
+		return callback(new Error("Invalid grantType"))
+	}
+
+	if (clientId == "CLIENTSP") {
+		respObj.isClientIdFound = true;
+		respObj.clientId=clientId;
+	} else {
+		return callback(new Error("Invalid clientId"));
+	}
+	
+	if( ["GPA", "CLIENTSP"].some( function(elem) { return elem ==  scope}) ) {
+		respObj.isScopeFound = true;
+		respObj.SCOPE=scope;
+	} else {
+		return callback(new Error("Invalid scope"));
+	}
+	
+	callback(null, req,respObj);
+}
+
 
 function signToken(res,secretkey,callback)
 {
@@ -881,7 +941,6 @@ function genSchema(title,fields) {
 	fieldObj.col      = 1;
 	fieldObj.childs   = []	;
 	for(var i=0; i< fields.length ; i++) {
-	
 		fieldChild       = USSField();
 		fieldChild.name  = fields[i].name;
 		fieldChild.label = fields[i].name.replace(/_/g,' ');
@@ -925,30 +984,77 @@ function genSchemaCollection(title,fields) {
 
 
 
-serviceHandler=function(req,res) {
-	addCoreFunction(req,function(req) {
+serviceHandler=function(req, res) {
+	
+	log.info("req.params.task:" ,  req.params.task , "req.params.module", req.params.module );
+	addCoreFunction(req, function(req) {
+		log.info("calling clientParamInp" );
+		
+			
 		var pageId="ServiceDetails";
 		var pageType='getServiceDetails';
-		var SchemaJson=[{"group":"USS","name":"ServiceDetails","label":"Basic Details","task":"ES","desc":"","htmlType":"PAGE","entitle":"NONREADONLY","enttlname":"","mndf":"N","dataType":"PAGE","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"0","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[{"group":"USS","name":"services","label":"Services","task":"NONE","desc":"","htmlType":"CONTAINER","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"CONTAINER","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"unlimited","col":"0","childs":[{"group":"USS","name":"resSjson","label":"Response schema json","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"unlimited","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]},{"group":"USS","name":"reqSjson","label":"Request schema json","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"unlimited","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]},{"group":"USS","name":"authReqd","label":"Request Schema Json","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]},{"group":"USS","name":"task","label":"Task","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]}]},{"group":"USS","name":"serviceName","label":"","task":"NONE","desc":"","htmlType":"CONTAINER","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"CONTAINER","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]}]}];
-		var DataJson=[{"ServiceDetails":[{"services":[{"resSjson":"Response schema json","reqSjson":"","authReqd":"", "task" : req.params.task }],"ServiceName":req.params.module}]}]
-		idb.InvokeDB(pageId,pageType,SchemaJson,DataJson,function(err, respSchemaJson, respDataJson) {
+	//	var SchemaJson=[{"group":"USS","name":"ServiceDetails","label":"Basic Details","task":"ES","desc":"","htmlType":"PAGE","entitle":"NONREADONLY","enttlname":"","mndf":"N","dataType":"PAGE","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"0","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[{"group":"USS","name":"services","label":"Services","task":"NONE","desc":"","htmlType":"CONTAINER","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"CONTAINER","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"unlimited","col":"0","childs":[{"group":"USS","name":"resSjson","label":"Response schema json","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"unlimited","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]},{"group":"USS","name":"reqSjson","label":"Request schema json","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"unlimited","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]},{"group":"USS","name":"authReqd","label":"Request Schema Json","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]},{"group":"USS","name":"task","label":"Task","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]}]},{"group":"USS","name":"serviceName","label":"","task":"NONE","desc":"","htmlType":"VARCHAR","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]}]}];
+		var SchemaJson=[{"group":"USS","name":"ServiceDetails","label":"Basic Details","task":"ES","desc":"","htmlType":"PAGE","entitle":"NONREADONLY","enttlname":"","mndf":"N","dataType":"PAGE","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"0","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[{"group":"USS","name":"services","label":"Services","task":"NONE","desc":"","htmlType":"CONTAINER","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"CONTAINER","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"unlimited","col":"0","childs":[{"group":"USS","name":"resSjson","label":"Response schema json","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"unlimited","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]},{"group":"USS","name":"reqSjson","label":"Request schema json","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"unlimited","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]},{"group":"USS","name":"authReqd","label":"Request Schema Json","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]},{"group":"USS","name":"task","label":"Task","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]},{"group":"USS","name":"method","label":"Task","task":"NONE","desc":"","htmlType":"TEXT","entitle":"READONLY","enttlname":"","mndf":"Y","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]}]},{"group":"USS","name":"serviceName","label":"","task":"NONE","desc":"","htmlType":"VARCHAR","entitle":"READONLY","enttlname":"","mndf":"N","dataType":"VARCHAR","cclass":"ctable","parent":"","parentHtmlType":"","validate":"","dflt":"","min":"0","max":"60","tips":"","onkeyup":"onKeyUp(this);","onchange":"onChange(this);","onkeydown":"onKeyDown(this);","onkeypress":"onKeyPress(this);","onclick":"onClick(this);","onblure":"onBlure(this);","listVal":"||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY","help":"N","helpLink":"helpload","xml":"Y","xmlname":"","Xpath":"/","maxCol":"1","col":"0","childs":[]}]}];
+		var DataJson=[{"ServiceDetails":[{"services":[{"resSjson":"Response schema json","reqSjson":"","authReqd":"", "task" : req.params.task , "method" : "POST"}],"serviceName":req.params.module}]}]
+		log.info("calling InvokeDB for serviceDetails");
+		
+		idb.InvokeDB(pageId, pageType, SchemaJson,DataJson, SchemaJson, function(err, respSchemaJson, respDataJson) {
 			if (err) {
-				res.statusCode=404;
-				return	res.send({errorDesc : "Request is not found"});
+				log.error(" Request has bad format:", err);
+				res.statusCode= 404;
+				return	res.send({errorDesc : "Request is not found:" + err.message  });
 			}
-			if (!heaeriesjson.valWithSch(respDataJson, respSchemaJson)) {
-				res.statusCode=501;
+			log.info("calling validate response ");
+			err=heaeriesjson.valWithSch(respSchemaJson, respDataJson)
+			if(err) {
+				log.error("Service Details : Response Schema validation is failed : ", err);
+				res.statusCode=500;
 				res.send({errorDesc : "Internal Server Error"});
-				throw new Error("Response Schema Validation Failed");
+				throw new Error("Response Schema Validation Failed" + err.message);
 			}
-			log.info("findService", respDataJson[0].ServiceDetails[0].services, req.params.task, req.getMethod());
+			log.info("calling validate response ");
+		/*TODO: if task is not found return 404*/
 			findService(respDataJson[0].ServiceDetails[0].services, req.params.task, req.getMethod(), function(err, currentService) {
 				if (err) {
-					res.statusCode=405;
-					return	res.send({errorDesc : "Method is not allowed"});
+					log.error("findService : ", err);
+					res.statusCode=err.httpRespCode;
+					return	res.send({errorDesc : err.name + " " + err.message });
 				}
-				res.send({"ServiceDetails" : respDataJson[0].ServiceDetails});
+				
+				clientParamInput(req, function(err, req, paramObj) {
+				log.info(" paramObj: " ,paramObj );
+
+				if (err) {
+					log.error("Request has invalid format: " ,err);
+					res.statusCode = 400;
+					return	res.send({errorDesc : err.message });
+				}
+				var apiPageId = req.params.module;
+				var apiPageType = req.params.task;
+				var apiParamDataJson = eval(req.getParam(currentService.reqSjson[0].name));
+				log.info("validate input");
+				err = heaeriesjson.valWithSch(currentService.reqSjson, apiParamDataJson);
+				if (err) {
+					log.error("Request has invalid format: " ,err);
+					res.statusCode = 400;
+					return	res.send({errorDesc : err.message });
+				}
+				log.info("call api mapper..",  JSON.stringify(apiParamDataJson));
+				idb.InvokeDB(apiPageId, apiPageType, currentService.reqSjson, apiParamDataJson, currentService.resSjson, function(err, apiSchemaJson, apiDataJson) {
+					//res.send({"ServiceDetails" : respDataJson[0].ServiceDetails});
+							if (err) {
+								
+								
+								log.error("API  InvokeDB :" ,err);
+								res.statusCode = err.httpRespCode;
+								return	res.send({errorDesc :  err.name + " " + err.message });
+							}
+							res.statusCode = 201;
+							return	res.send(apiDataJson);
+				});
+				
 			});
+		});	
 		});	
 	});
 }
@@ -959,8 +1065,15 @@ findService=function(services, task, method, callback) {
 		return callback(null, services[i]);
 		}
 	}
-	return callback(new Error("Task is not found :[" + task +"]"));
+
+	var TaskList = new Array();
+	services.forEach(function(elem) { TaskList.push(elem.task)} );
 	
+	if (!TaskList.some( function(elem) { return elem == task})) {
+		return callback(new TaskNotFound("Task is not found :[" + task +"] in " + TaskList));
+	} else {
+		return callback(new MethodIsNotFound("Method is not found :[" + task +"]"));
+	}
 }
 
 function validateHeader(req,callback) {

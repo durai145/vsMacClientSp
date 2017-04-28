@@ -109,7 +109,6 @@ var obj =  {
 }
 
 hasChild=function(fieldObj) {
-	console.log("fieldObj.childs:" + typeof fieldObj.childs )
 	if( Array.isArray(fieldObj.childs)) {
 		if( fieldObj.childs.length == 0 ) {
 			return false;
@@ -158,28 +157,37 @@ hasValidKeys  = function(recKeys, recSchKeys) {
 		}
 	});
 	return rtObj;
+
 }
 
 hasParent = function(schObj) {
-	return (["PAGE", "COLLECTIONS", "CONTAINER"].some(function(elem) {return elem==schObj.dataType;}));
+	return (["PAGE", "COLLECTIONS", "CONTAINER"].some(function(elem) { console.log(elem + "==" + schObj.dataType); return elem==schObj.dataType;}));
 };
 
 
 valWithSch = function (recSch, rec) {
 
+/* is valid Schema ?*/
+/* is valid Json ?*/
+	//console.error("rec= " + JSON.stringify(rec));
+	//console.error("recSch= " + JSON.stringify(recSch));
+	//console.log("typeof rec=" + typeof rec);
+	/*console.log("typeof rec.length =" + rec.length + "recSch[0].mndf=" + recSch[0].mndf);*/
 	if (((rec.length == 0) ||  (rec.length  == undefined)) &&  (recSch[0].mndf =="Y")) {
-		return new Error("Expected object  for  dataType  " + recSch[0].dataType + "of  " + recSch[0].name +"  but found is " +  JSON.stringify(rec));
+		return new Error("Expected object  for " + recSch[0].name +" but found is " +  JSON.stringify(rec));
 	}
 	
 	var recSchKeys = getJsonKeysFromSchema(recSch);
 	for (var r=0; r<rec.length; r++) {
 		for (var s =0; s<recSch.length; s++) {
-			var value=rec[r][recSch[s].name];
-//			console.log("Name : %s , Type : %s, value : %s", recSch[s].name, recSch[s].dataType, JSON.stringify(value));
+		console.log("C:001: check has valid Key");
 		var rtErr = hasValidKeys(getJsonKeys(rec[r]), recSchKeys);
 			if (rtErr) {
 				return rtErr;
 			}
+			
+		var value=rec[r][recSch[s].name];
+		
 				if (value === undefined) {
 					value=new String();
 				}
@@ -197,18 +205,26 @@ valWithSch = function (recSch, rec) {
 				}
 				if(recSch[s].mndf == "Y") {
 					if (value == "") {
-						return new Error(recSch[s].name + "  is mandatory: [" + value +"]")
+						return new Error(recSch[s].name + " is mandatory: [" + value +"]")
 					}
 				}
+			console.log("C:002: check is ParentNode", recSch[s]);	
 		if (hasParent(recSch[s])) {
+			/*if (typeof recSch[s].childs != "Array") {
+				recSch[s].childs=new Array();
+			}*/
 			if ( typeof value != "object") {
-				return new Error("Expected object  for  dataType  " + recSch[0].dataType + " of " + recSch[s].name +" but found is " + typeof value);
+				return new Error("Expected object  for " + recSch[s].name +" but found is " + typeof value);
 			}
-			var err=valWithSch(recSch[s].childs,value);
-			if (err)  {
+			
+			if (hasChild(value)) {
+				var err=valWithSch(value, recSch[s].childs);
+				if (err)  {
 					return err;
+				}
 			}
 		} else  {
+				console.log("Validade the Field");
 				switch (recSch[s].dataType) {
 					case "DATE" : 
 						re = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
@@ -258,7 +274,7 @@ valWithSch = function (recSch, rec) {
 						break;
 					case "LIST" :
 					case "OPTION" :
-			
+						recSch[s].listVal
 						if (value != '') {
 							var inpStrArr= recSch[s].listVal.split('|');
 							var chk=0;

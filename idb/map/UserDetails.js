@@ -21,8 +21,7 @@ GPASSO_PROD001MT_Model.remove({}, function(err) {
 	  dtCreated: new Date(),
 	  mkrId: 1 }
 	);
-		var  prtl= new GPASSO_PRTL002MT_Model(
-		{
+		var  prtl= new GPASSO_PRTL002MT_Model({
 			  pageGrpIds: [],
 			  roleIds: [],
 			  basePath: '',
@@ -32,11 +31,9 @@ GPASSO_PROD001MT_Model.remove({}, function(err) {
 			  athId: 1,
 			  dtCreated: new Date(),
 			  mkrId: 1 
-		}
-		);
+		});
 
-	var pggr=new GPASSO_PGGR004MT_Model(
-		{
+	var pggr=new GPASSO_PGGR004MT_Model({
   dispOrder: 1,
   pageGrpTitle: 'DASHBOARD',
   pageGrpKey: 'DASHBOARD',

@@ -1,11 +1,11 @@
 'use strict';
 
-module.exports = function InternalServerError(message, extra) {
+module.exports = function TaskIsNotFound(message, extra) {
   Error.captureStackTrace(this, this.constructor);
   this.name = this.constructor.name;
   this.message = message;
   this.extra = extra;
-  this.respCode = 401;
+  this.httpRespCode = 404;
 };
 
 require('util').inherits(module.exports, Error);

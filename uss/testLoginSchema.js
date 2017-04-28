@@ -65,7 +65,7 @@ var  json = [{"loginDetailsResponse":[{	"userDetails":[{"firstName" : "Duraimuru
 }];
  
 
-var err=heaeriesjson.valWithSch(json,sjson);
+var err=heaeriesjson.valWithSch(sjson, json);
 if (err) {
 	return	console.log(err);
 }

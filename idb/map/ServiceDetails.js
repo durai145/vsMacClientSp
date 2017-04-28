@@ -12,20 +12,15 @@ var ObjectId = mongoose.Types.ObjectId;
 
 
 
-exports.getServiceDetails=function(inSchema, inJson, callback) {
+exports.getServiceDetails=function(inSchema, inJson, inRespSchema, callback) {
 
 	var serviceObj = new GPASSO_SRVS006MT_Model();
-	GPASSO_SRVS006MT_Model.find({"serviceName" : inJson[0].ServiceDetails[0].ServiceName }, function(err, srvs006mt) {
-	var outJson=[{"ServiceDetails":[{"services":[{"resSjson":"Response schema json","reqSjson":"Request schema json","authReqd":"Request Schema Json"}],"ServiceName":""}]}];
-
-	log.info(" GSD:001");
+	GPASSO_SRVS006MT_Model.find({"serviceName" : inJson[0].ServiceDetails[0].serviceName }, function(err, srvs006mt) {
+	var outJson=[{"ServiceDetails":[{"services":[{"resSjson":"Response schema json","reqSjson":"Request schema json","authReqd":"Request Schema Json"}],"serviceName":""}]}];
 
 	if (err) {
 		return callback(inSchema,outJson);
-
 	}
-	log.info("GSD:002 ",srvs006mt);
-	log.info("GSD:003 ",typeof srvs006mt);
 	if ((srvs006mt.length === undefined)||(srvs006mt.length == 0)) {
 		return	callback(new Error("No data found"));
 		
@@ -36,22 +31,20 @@ exports.getServiceDetails=function(inSchema, inJson, callback) {
 	outJson[0].ServiceDetails[0].services[0].authReqd = srvs006mt[0].services[0].authReqd;
 	outJson[0].ServiceDetails[0].services[0].task = srvs006mt[0].services[0].task;
 	outJson[0].ServiceDetails[0].services[0].method = srvs006mt[0].services[0].method;
-	outJson[0].ServiceDetails[0].serviceName=srvs006mt[0].serviceName;
-	console.log(JSON.stringify(srvs006mt));
-	console.log(JSON.stringify(outJson));
-	return callback(null,inSchema,outJson);
+	outJson[0].ServiceDetails[0].serviceName = srvs006mt[0].serviceName;
+
+	return callback(null, inRespSchema, outJson);
 	});
 }
 
-exports.saveServiceDetails=function(inSchema,inJson,callback) {
-	//[{"ServiceDetails":[{"services":[{"resSjson":resSchema,"reqSjson": reqSchema,"authReqd": false ,"task":"doLogin"}],"serviceName":"loginDetails"}]}]
+exports.saveServiceDetails=function(inSchema, inJson, inRespSchema, callback) {
 	var service = new GPASSO_SRVS006MT_Model({
-	  services: inJson[0].ServiceDetails[0].services,
-	  serviceName: inJson[0].ServiceDetails[0].serviceName,
-	  dtModified: new Date(),
-	  athId: 1,
-	  dtCreated: new Date(),
-	  mkrId: null});
+	services: inJson[0].ServiceDetails[0].services,
+	serviceName: inJson[0].ServiceDetails[0].serviceName,
+	dtModified: new Date(),
+	athId: 1,
+	dtCreated: new Date(),
+	mkrId: null});
 	service.save(function(err) {
 		if(err) {
 			log.error("unable to save service: ", err);

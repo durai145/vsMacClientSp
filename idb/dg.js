@@ -1,11 +1,9 @@
-var log                 = require('./libs/log')(module);
 var GPASSO_PROD001MT_Model   = require('./libs/gpassov3').GPASSO_PROD001MT_Model;
 var GPASSO_PRTL002MT_Model   = require('./libs/gpassov3').GPASSO_PRTL002MT_Model;
 var GPASSO_ROLE003MT_Model   = require('./libs/gpassov3').GPASSO_ROLE003MT_Model;
 var GPASSO_PGGR004MT_Model   = require('./libs/gpassov3').GPASSO_PGGR004MT_Model;
 var GPASSO_SSID003MT_Model   = require('./libs/gpassov3').GPASSO_SSID003MT_Model;
 var GPASSO_PAGE005MT_Model   = require('./libs/gpassov3').GPASSO_PAGE005MT_Model;
-var mongoose            = require('./libs/gpassov3').mongoose;
 var ObjectId = mongoose.Types.ObjectId;
 
 
