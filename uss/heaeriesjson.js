@@ -109,7 +109,6 @@ var obj =  {
 }
 
 hasChild=function(fieldObj) {
-	console.log("fieldObj.childs:" + typeof fieldObj.childs )
 	if( Array.isArray(fieldObj.childs)) {
 		if( fieldObj.childs.length == 0 ) {
 			return false;
@@ -167,7 +166,7 @@ hasParent = function(schObj) {
 
 valWithSch = function (recSch, rec) {
 
-	if (((rec.length == 0) ||  (rec.length  == undefined)) &&  (recSch[0].mndf =="Y")) {
+	if (((rec.length == 0) ||  (rec.length  == undefined)) &&  ( recSch[0] != undefined)  && (recSch[0].mndf =="Y")) {
 		return new Error("Expected object  for  dataType  " + recSch[0].dataType + "of  " + recSch[0].name +"  but found is " +  JSON.stringify(rec));
 	}
 	
@@ -200,7 +199,7 @@ valWithSch = function (recSch, rec) {
 						return new Error(recSch[s].name + "  is mandatory: [" + value +"]")
 					}
 				}
-		if (hasParent(recSch[s])) {
+		if (hasChild(recSch[s])) {
 			if ( typeof value != "object") {
 				return new Error("Expected object  for  dataType  " + recSch[0].dataType + " of " + recSch[s].name +" but found is " + typeof value);
 			}
@@ -209,6 +208,8 @@ valWithSch = function (recSch, rec) {
 					return err;
 			}
 		} else  {
+			
+				value = new String(value);
 				switch (recSch[s].dataType) {
 					case "DATE" : 
 						re = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
@@ -238,6 +239,8 @@ valWithSch = function (recSch, rec) {
 					case "VARCHAR" :
 						if (recSch[s].max != "unlimited") {
 							re = RegExp("^[A-Za-z0-9_\\s]{"+ recSch[s].min + "," + recSch[s].max + "}$");
+							//console.log(typeof value);
+							//console.log(value);
 							if(value != '' && !value.match(re)) {
 								return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
 							}

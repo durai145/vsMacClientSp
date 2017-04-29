@@ -4,6 +4,6 @@
         "tokenLife" : 3600
     },
     "mongoose": {
-        "uri": "mongodb://10.0.0.238/gpasso"
+        "uri": "mongodb://10.0.0.123/gpasso"
     }
 }

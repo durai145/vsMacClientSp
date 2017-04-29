@@ -1043,12 +1043,18 @@ serviceHandler=function(req, res) {
 				idb.InvokeDB(apiPageId, apiPageType, currentService.reqSjson, apiParamDataJson, currentService.resSjson, function(err, apiSchemaJson, apiDataJson) {
 					//res.send({"ServiceDetails" : respDataJson[0].ServiceDetails});
 							if (err) {
-								
-								
 								log.error("API  InvokeDB :" ,err);
 								res.statusCode = err.httpRespCode;
 								return	res.send({errorDesc :  err.name + " " + err.message });
 							}
+							
+							err = heaeriesjson.valWithSch(apiSchemaJson, apiDataJson);
+							if (err) {
+								log.error("Internal Server Errot" ,err);
+								res.statusCode = 500;
+								return	res.send({errorDesc : err.message });
+							}
+							
 							res.statusCode = 201;
 							return	res.send(apiDataJson);
 				});

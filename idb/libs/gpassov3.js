@@ -56,7 +56,7 @@ module.exports.mongoose=mongoose;
 , dtCreated: { type: Date, unique: false, required: false, default: ''  } 
 , athId: { type: Number, unique: false, required: false, default: ''  } 
 , dtModified: { type: Date, unique: false, required: false, default: ''  } 
-, firstNane: { type: String, unique: false, required: false, default: ''  } 
+, firstName: { type: String, unique: false, required: false, default: ''  } 
 , lastName: { type: String, unique: false, required: false, default: ''  } 
 , middleName: { type: String, unique: false, required: false, default: ''  } 
 , username: { type: String, unique: false, required: false, default: ''  } 

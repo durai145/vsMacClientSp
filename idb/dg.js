@@ -1,3 +1,4 @@
+var mongoose = require('./libs/gpassov3').mongoose;
 var GPASSO_PROD001MT_Model   = require('./libs/gpassov3').GPASSO_PROD001MT_Model;
 var GPASSO_PRTL002MT_Model   = require('./libs/gpassov3').GPASSO_PRTL002MT_Model;
 var GPASSO_ROLE003MT_Model   = require('./libs/gpassov3').GPASSO_ROLE003MT_Model;
@@ -55,10 +56,10 @@ GPASSO_PROD001MT_Model.remove({}, function(err) {
   userType: 'Member',
   empId: 'H1450002',
   password: '1qaz2wsx',
-  username: 'H1450001',
+  username: 'H1450002',
   middleName: '',
   lastName: 'Govindaraj',
-  firstNane: 'Jayagopal',
+  firstName: 'Jayagopal',
   dtModified: new Date(),
   athId: 1,
   dtCreated: new Date(),
@@ -72,7 +73,7 @@ GPASSO_PROD001MT_Model.remove({}, function(err) {
   username: 'H1450001',
   middleName: '',
   lastName: 'Govindaraj',
-  firstNane: 'Gangammal',
+  firstName: 'Gangammal',
   dtModified: new Date(),
   athId: 1,
   dtCreated: new Date(),
@@ -98,7 +99,7 @@ GPASSO_PROD001MT_Model.remove({}, function(err) {
 { 
   dispOrder: 1,
   pageTitle: 'dashboard',
-  pageKey: 'dashboard.json',
+  pageKey: 'dashboard',
   dtModified: new Date(),
   athId: 1,
   dtCreated: new Date(),
