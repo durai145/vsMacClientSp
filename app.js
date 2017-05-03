@@ -33,10 +33,7 @@ device.enableViewRouting(app);
 app.use(cookieParser());
 app.use(session({secret: 'glbladmin', resave: false, saveUninitialized: true}));
 var sess ;
-function dbError(err)
-{
-	console.log(err);
-}
+
 
 app.all('*', function(req, res, next) {
 	var agent = useragent.parse(req.headers['user-agent']);
@@ -80,9 +77,6 @@ app.all('*', function(req, res, next) {
 	}
 	browser += " " + useragent.is(req.headers['user-agent']).version;
 
-console.log("BROWSER = " +  browser);
-console.log("OS      = " + agent.os.toString());
-console.log("Device  = " + agent.device.toString());
 	if ( geo == null) {
 		geo={
 		country:'NA'
@@ -126,8 +120,6 @@ function insertLogin(BrowserInfo) {
 	console.log( 'INSERT INTO LOGIN HIST TABLE' + BrowserInfo);
 }
 
-//app.use(bodyParser.json());
-//app.set('view engine', 'ejs');
 app.get('/appstatus', function(req, res){
 	res.send('Heaerie Mail Server Active');
 });
@@ -398,6 +390,7 @@ function clientParamInput(req,callback)
 		,scope:""
 		,state: ""
 	};
+	
 	respObj.state=state;
 	if(respObj.accessToken != null)
 	{
@@ -405,7 +398,7 @@ function clientParamInput(req,callback)
 	}
 	/*need To be introduce table*/
 
-	if (grantType == "password") {
+	if (["password", "token"].some(function(elem) { return elem ==  grantType})) {
 	 respObj.isValidGrantType = true;
 	 respObj.grantType=grantType;
 	} else {
@@ -435,9 +428,11 @@ function signToken(res,secretkey,callback)
 	var payload={
 		iss: "Heaerie GSL"
 		,aud: "www.myroomexpense.com"
-		,iat: ms(sessionExpSec)
+		,iat: sessionExpSec
+		,name : "iat"
 		};
-var token = jwt.sign(payload, secretkey,{ complete: true, maxAge:ms(sessionExpSec), expiresInMinutes: sessionExpSec/60});
+		console.log(payload);
+	var token = jwt.sign(payload, secretkey,{ });
 	res.setHeader("x-access-token",token);
 	callback(res);
 }
@@ -1056,7 +1051,9 @@ serviceHandler=function(req, res) {
 							}
 							
 							res.statusCode = 201;
-							return	res.send(apiDataJson);
+							signToken(res, secretkey, function(res) {
+								return	res.send(apiDataJson);
+							});
 				});
 				
 			});
@@ -1275,9 +1272,8 @@ app.post('/api/:module/:service', function(req,res) {
 		});
 	}
 });
-console.log(__dirname);
+
 app.use(express.static(__dirname+'/public'));
-app.use(express.static(__dirname+'/mids'));
 var server = app.listen(config.port, function() {
 	console.log('Listening on port %d', server.address().port);
 });

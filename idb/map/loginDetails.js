@@ -12,39 +12,13 @@ var GPASSO_PAGE005MT_Model   = require('../libs/gpassov3').GPASSO_PAGE005MT_Mode
 var ObjectId = mongoose.Types.ObjectId;
 
 var InternalServer = require("../../libs/error/InternalServer");
-
-doLogin1=function(loginDetails, callback) {
-	loginDetails= loginDetails|| {};
-//		if (loginDetails.username != undefined ||  loginDetails.password  != undefined ||   loginDetails.prtlKey != undefined) {
-//			callback&&callback(new Error(""), {});
-//		} else {
-			GPASSO_SSID003MT_Model.findOne({"username": loginDetails.username},function (err, ssid) {
-				if(err) {
-					callback&&callback({ "respCode"  : "500" , "respDesc" : "Internal Server Error"}, ErrorResponseSchema, [{"ErrorResponse":[{"status":[{"responseCode":"000","responseDesc":"Successfully saved"}]}]}] );
-				} else {
-					GPASSO_PROD001MT_Model.findOne({ "usrIds"  : { $in : [ssid._id] }}).populate("prtlIds").exec(function (err, prod) {
-						GPASSO_PRTL002MT_Model.find({_id : {$in : prod.prtlIds } , prtlName: 'Member Portal'}).exec(function(err,prtl) {
-							prtl.forEach(function(prtlObj) {
-								GPASSO_ROLE003MT_Model.findOne({ _id: {$in : prtlObj.roleIds} , usrIds : {$in : [ssid._id]}}).populate("pageGrpIds").exec(function(err,role) {
-									GPASSO_PGGR004MT_Model.find( { _id : { $in :role.pageGrpIds} }).populate("pageIds").exec( function(err,pggr) {
-										callback&&callback(  null, {"respCode" : "200", "respDesc" : "Success", "resp" : pggr});
-									});
-								});
-							});
-						});
-					});
-			}
-		});
-//	}
-}
-
 exports.doLogin=function(inSchema, inJson, inRespSchema, callback) {
 	//console.log("in loginDetails.doLogin");
 	//console.log(inJson);
 	//doLogin1(inJson[0].LoginDetails[0], function(err) {
 	var outJson =  [{"loginDetailsResponse":[{	"userDetails":[{"firstName" : "Duraimurugan",
-							"lastName" : "Govindaraj",
-							"grpName" : "SecAdmin",
+							"lastName" : "dummy",
+							"grpName" : "role",
 							"prodVersion": "A1" ,
 							"prtlName" : "MyRoomexpense"}]
 					,"entitlement":[{"link": "test1",
@@ -67,10 +41,6 @@ exports.doLogin=function(inSchema, inJson, inRespSchema, callback) {
 							 ]}]
 			}]
 }];
-//[{"loginDetailsRequest":[{"userDeatils":[{"username":"Username","password":"Password"}], "portalDeatils":[{"portalKey":"MYROOMEXPENSE"}]}]}];
-
-console.log(JSON.stringify(inJson));
-//[{"loginDetailsRequest":[{"userDeatils":[{"username":"Username","password":"Password"}],"portalDeatils":[{"portalKey":"MYROOMEXPENSE"}]}]}]
 
 var userDetails = inJson[0].loginDetailsRequest[0].userDeatils[0];
 var portalDeatils = inJson[0].loginDetailsRequest[0].portalDeatils[0];
@@ -158,11 +128,7 @@ GPASSO_SSID003MT_Model.findOne({"username": userDetails.username},function (err,
 										 outJson[0].loginDetailsResponse[0].userDetails[0].prtlName = prod.prodName + " " + prtl[0].prtlName;
 										 outJson[0].loginDetailsResponse[0].userDetails[0].prodVersion = prod.prodVersion + " " + prtl[0].prtlVersion;
 										 outJson[0].loginDetailsResponse[0].entitlement = entitlement;
-										//return callback&&callback(  null, ErrorResponseSchema, [{"ErrorResponse":[{"status":[{"responseCode":"000","responseDesc":" access granted"}]}]}] );
-										
-										
 										return callback&&callback(  null, inRespSchema, outJson);
-										
 									});
 								});
 

@@ -246,6 +246,7 @@ valWithSch = function (recSch, rec) {
 							}
 						} else {
 							re =/^[A-Za-z0-9_\s]+$/;
+							//TODO: handle object 
 							if(typeof value == "object") {
 								try {
 									JSON.stringify(value);		

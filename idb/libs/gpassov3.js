@@ -23,13 +23,21 @@ module.exports.mongoose=mongoose;
 , dtCreated: { type: Date, unique: false, required: false, default: ''  } 
 , athId: { type: Number, unique: false, required: false, default: ''  } 
 , dtModified: { type: Date, unique: false, required: false, default: ''  } 
-, pageKey: { type: String, unique: false, required: false, default: ''  } 
+, pageKey: { type: String, unique: true, dropDups: true, default: ''  } 
 , pageTitle: { type: String, unique: false, required: false, default: ''  } 
 , dispOrder: { type: Number, unique: false, required: false, default: ''  } 
+, services : [{
+  method: { type: String, unique: false, required: true, default: ''  } 
+, authReqd: { type: Boolean, unique: false, required: true, default: true  } 
+, task: { type: String, unique: false, required: true, default: ''  } 
+, reqSjson: []
+, resSjson: []
+}]
 });
 
  GPASSO_PAGE005MT.index({ 
     _id : 1 
+	,pageKey: 1
 });
  var GPASSO_PAGE005MT_Model = mongoose.model('GPASSO_PAGE005MT', GPASSO_PAGE005MT); 
  module.exports.GPASSO_PAGE005MT_Model = GPASSO_PAGE005MT_Model; 
