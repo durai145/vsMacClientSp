@@ -13,9 +13,7 @@ var ObjectId = mongoose.Types.ObjectId;
 
 
 exports.getServiceDetails=function(inSchema, inJson, inRespSchema, callback) {
-
 	var serviceObj = new GPASSO_PAGE005MT_Model();
-	log.info("inJson[0].ServiceDetails[0].serviceName:" + inJson[0].ServiceDetails[0].serviceName);
 	GPASSO_PAGE005MT_Model.find({"pageKey" : inJson[0].ServiceDetails[0].serviceName }, function(err, srvs006mt) {
 	var outJson=[{"ServiceDetails":[{"services":[{"resSjson":"Response schema json","reqSjson":"Request schema json","authReqd":"Request Schema Json"}],"serviceName":""}]}];
 
@@ -38,8 +36,9 @@ exports.getServiceDetails=function(inSchema, inJson, inRespSchema, callback) {
 	});
 }
 
+
+
 exports.saveServiceDetails=function(inSchema, inJson, inRespSchema, callback) {
-	log.info("in save service details: 001");
 	var service = new GPASSO_PAGE005MT_Model({
 	services: inJson[0].ServiceDetails[0].services,
 	pageKey: inJson[0].ServiceDetails[0].serviceName,
@@ -47,15 +46,12 @@ exports.saveServiceDetails=function(inSchema, inJson, inRespSchema, callback) {
 	athId: 1,
 	dtCreated: new Date(),
 	mkrId: null});
-		log.info("in save service details: 002", service);
 	service.save(function(err) {
 		if(err) {
 			log.error("unable to save service: ", err);
-			//return	callback && callback(new Error("unable to save service:" + JSON.stringify(service) + " , error Object: " + JSON.stringify(err)),[], []);
-			return	callback && callback(null, ErrorResponseSchema, [{"ErrorResponse":[{"status":[{"responseCode":"001","responseDesc":"unable to save to database"}]}]}]);
+			return	callback && callback(null, ErrorResponseSchema, [{"ErrorResponse":[{"status":[{"responseCode":"001","responseDesc":"unable to save in database"}]}]}]);
 		}
-		console.log(service);
-		return	callback && callback(null,ErrorResponseSchema, [{"ErrorResponse":[{"status":[{"responseCode":"000","responseDesc":"Successfully savedss"}]}]}]);
+		return	callback && callback(null,ErrorResponseSchema, [{"ErrorResponse":[{"status":[{"responseCode":"000","responseDesc":"Successfully saved"}]}]}]);
 		console.log(" Successfully saved");
 		
 	});
