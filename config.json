@@ -1,9 +1,1 @@
-{
-    "port" : 1337,
-    "security": {
-        "tokenLife" : 3600
-    },
-    "mongoose": {
-        "uri": "mongodb://10.0.0.123/gpasso"
-    }
-}
+../config/config.json
