@@ -4,7 +4,7 @@ var mongoose    = require('mongoose');
 var log         = require('./log')(module);
 var config      = require('./config');
 var crypto      = require('crypto');
-mongoose.connect(config.get('mongoose:uri'));
+mongoose.connect(config.get('mongoose:uri'), "primaryPreferred");
 var db = mongoose.connection;
 db.on('error', function (err) {
     log.error('connection error:', err.message);
