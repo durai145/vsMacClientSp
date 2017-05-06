@@ -35,6 +35,12 @@ exports.mapper=
 		,pageMethod: 'POST'	
 		,map: 'loginDetails'
 	}
+,'userDetails' : {
+		pageId: 'UserDetails'
+		,pageModel: 'CDR'
+		,pageMethod: 'POST'	
+		,map: 'userDetails'
+	}
 ,'ServiceDetails' : {
 		pageId: 'UserDetails'
 		,pageModel: 'CDR'

@@ -166,7 +166,11 @@ hasParent = function(schObj) {
 
 valWithSch = function (recSch, rec) {
 
-	if (((rec.length == 0) ||  (rec.length  == undefined)) &&  ( recSch[0] != undefined)  && (recSch[0].mndf =="Y")) {
+	if (recSch == undefined && rec == undefined) {
+		return null;
+	}
+
+	if (((rec == undefined) || (rec.length == 0) ||  (rec.length  == undefined)) &&  ( recSch[0] != undefined)  && (recSch[0].mndf =="Y")) {
 		return new Error("Expected object  for  dataType  " + recSch[0].dataType + "of  " + recSch[0].name +"  but found is " +  JSON.stringify(rec));
 	}
 	
