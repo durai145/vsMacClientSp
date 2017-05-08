@@ -168,7 +168,14 @@ function addCoreFunction(req,callback) {
 		var retVal="";
 		if(req.method == "POST") {
 			try {
-				retVal=req.params[arg] || req.body[arg]  ;	
+				log.info("params:" + req.params[arg]);
+				log.info("body:" + req.body[arg]);
+				if ( req.params[arg]  == undefined) {
+					retVal=req.body[arg]; 
+				} else {
+				retVal=req.params[arg]  ;	
+				}
+				
 			} catch(e) {
 				retVal="";
 			}
@@ -1017,7 +1024,7 @@ serviceHandler=function(req, res) {
 				}
 				
 				clientParamInput(req, function(err, req, paramObj) {
-				log.info(" paramObj: " ,paramObj );
+				log.info(" paramObj: " , paramObj );
 
 				if (err) {
 					log.error("Request has invalid format: " ,err);
@@ -1026,6 +1033,10 @@ serviceHandler=function(req, res) {
 				}
 				var apiPageId = req.params.module;
 				var apiPageType = req.params.task;
+				log.info("currentService.reqSjson[0].name =" + currentService.reqSjson[0].name);
+				log.info("param =" + req.getParam(currentService.reqSjson[0].name));
+				log.info("req.param:" + JSON.stringify(req.params));
+				log.info("req.body:" + JSON.stringify(req.body));
 				var apiParamDataJson = eval(req.getParam(currentService.reqSjson[0].name));
 				log.info("validate input");
 				err = heaeriesjson.valWithSch(currentService.reqSjson, apiParamDataJson);

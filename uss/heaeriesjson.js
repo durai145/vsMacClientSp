@@ -165,16 +165,19 @@ hasParent = function(schObj) {
 
 
 valWithSch = function (recSch, rec) {
+	var recSchKeys = getJsonKeysFromSchema(recSch);
 
 	if (recSch == undefined && rec == undefined) {
 		return null;
+	} else if (rec == undefined ) {
+		return new Error("Data Json is undefined  for Shema Keys" + JSON.stringify(recSchKeys));
 	}
+	
 
 	if (((rec == undefined) || (rec.length == 0) ||  (rec.length  == undefined)) &&  ( recSch[0] != undefined)  && (recSch[0].mndf =="Y")) {
 		return new Error("Expected object  for  dataType  " + recSch[0].dataType + "of  " + recSch[0].name +"  but found is " +  JSON.stringify(rec));
 	}
 	
-	var recSchKeys = getJsonKeysFromSchema(recSch);
 	for (var r=0; r<rec.length; r++) {
 		for (var s =0; s<recSch.length; s++) {
 			var value=rec[r][recSch[s].name];
