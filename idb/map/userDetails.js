@@ -23,7 +23,7 @@ var userDetails = inJson[0].isValidUserRequest[0].userDetails[0];
 var portalDeatils = inJson[0].isValidUserRequest[0].portalDetails[0];
 
 log.info("calling GPASSO_SSID003MT_Model");
-GPASSO_SSID003MT_Model.findOne({"username": userDetails.emailId},function (err, ssid) {
+GPASSO_SSID003MT_Model.findOne({"emailId": userDetails.emailId},function (err, ssid) {
 				
 				if(err) {
 					log.error("in doLogin:" , err);
