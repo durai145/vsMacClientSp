@@ -245,7 +245,7 @@ valWithSch = function (recSch, rec) {
 						break;
 					case "VARCHAR" :
 						if (recSch[s].max != "unlimited") {
-							re = RegExp("^[A-Za-z0-9_\\s]{"+ recSch[s].min + "," + recSch[s].max + "}$");
+							re = RegExp("^[A-Za-z0-9_\.\\s]{"+ recSch[s].min + "," + recSch[s].max + "}$");
 							//console.log(typeof value);
 							//console.log(value);
 							if(value != '' && !value.match(re)) {
