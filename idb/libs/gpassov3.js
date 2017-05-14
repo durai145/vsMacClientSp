@@ -72,6 +72,7 @@ module.exports.mongoose=mongoose;
 , username: { type: String, unique: false, required: false, default: ''  } 
 , password: { type: String, unique: false, required: false, default: ''  } 
 , empId: { type: String, unique: false, required: false, default: ''  } 
+, emailId: { type: String, unique: false, required: false, default: ''  } 
 , userType: { type: String, unique: false, required: false, default: ''  } 
 , userRole: { type: String, unique: false, required: false, default: ''  } 
 });
