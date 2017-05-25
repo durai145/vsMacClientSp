@@ -154,12 +154,12 @@ this.task       = 'NONE',
 this.desc       = '',
 this.htmlType   = 'text', /* newly introduced in USS05*/
 this.entitle    = 'READONLY'; // Editable /Readonly
-this.enttlname  = ''; //Entitle name to db
+this.enttlname  =  0xFF, //Entitle name to db
 this.mndf       = 'N',
 this.dataType   = 'VARCHAR',  // NUMBER/VARCHAR/DATE/EMAIL/AMOUNT/LIST/DIV/
 this.cclass     = 'ctable',   //
 this.parent     = '',
-this.parentHtmlType     = '',
+this.parentHtmlType = '',
 this.validate   = '',
 this.dflt       = '',
 this.min        = '0',
@@ -178,7 +178,12 @@ this.xml        = 'Y',
 this.xmlname    = '',
 this.Xpath      = '/' ,
 this.maxCol     = '1',
-this.col        = '0'
+this.col        = '0',
+this.dimensions = '1',
+this.dimensionMax = '1',
+this.dimensionMin = '0',
+this.dataCategory = '',
+this.camelCase = false
 	
 }
 USS.prototype.USSCreareTab_=function()
@@ -491,6 +496,29 @@ if( this.USSCheckMode(mode , "REGISTER")  )
    this.ElEditButton.appendChild(this.ButtonLabel);
    this.El.appendChild(this.ElEditButton );
 }
+
+
+if( this.USSCheckMode(mode , "SUBMIT")  )
+{
+
+//<a href="#" class="delete btn btn-danger btn-small">delete</a>
+   this.ElEditButton                 = document.createElement("button");
+   this.ElEditButton.className       = "bheaderButton btn";
+   this.ElEditButton.value           = "SUBMIT" ;
+  // this.ElEditButton.setAttribute("href","#notes/delete");
+  // this.ElEditButton.setAttribute("href","#/dashboard/");
+   this.ElEditButton.setAttribute("ng-click","Submit()");
+   this.ButtonLabel         = document.createTextNode("SUBMIT");
+
+    this.fontawesome = document.createElement('i');
+   //this.fontawesome.className       = "fa fa-repeat";
+   this.fontawesome.className       = "fa fa-hand-pointer-o";
+  
+   this.ElEditButton.appendChild(this.fontawesome);
+   this.ElEditButton.appendChild(this.ButtonLabel);
+   this.El.appendChild(this.ElEditButton );
+}
+
 if(this.USSCheckMode(mode , "BACK" ) )
 {
 

@@ -206,85 +206,115 @@ valWithSch = function (recSch, rec) {
 						return new Error(recSch[s].name + "  is mandatory: [" + value +"]")
 					}
 				}
-		if (hasChild(recSch[s])) {
-			if ( typeof value != "object") {
-				return new Error("Expected object  for  dataType  " + recSch[0].dataType + " of " + recSch[s].name +" but found is " + typeof value);
-			}
-			var err=valWithSch(recSch[s].childs,value);
-			if (err)  {
-					return err;
-			}
-		} else  {
-			
-				value = new String(value);
-				switch (recSch[s].dataType) {
-					case "DATE" : 
-						re = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
-						if((value != '') && (!value.match(re))) {
-							return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
-						}
-						break;
-					case "TIME" :
-						re = /^\d{1,2}:\d{2}([ap]m)?$/;
-						if(value != '' && !value.match(re)) {
-							return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
-						}
-						break;
-					case "NUMBER" :
-						if (recSch[s].max != "unlimited") {
-							re = RegExp("^[0-9.]{"+ recSch[s].min + "," + recSch[s].max + "}$");
-							if(value != '' && !re.test(value)) {
-								return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
-							}
-						} else {
-							re =/^[A-Za-z0-9_]$/;
-							if(value != '' && !value.match(re)) {
-								return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
-							}
-						}
-						break;
-					case "VARCHAR" :
-						if (recSch[s].max != "unlimited") {
-							re = RegExp("^[A-Za-z0-9_\.\\s]{"+ recSch[s].min + "," + recSch[s].max + "}$");
-							//console.log(typeof value);
-							//console.log(value);
-							if(value != '' && !value.match(re)) {
-								return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
-							}
-						} else {
-							re =/^[A-Za-z0-9_\s]+$/;
-							//TODO: handle object 
-							if(typeof value == "object") {
-								try {
-									JSON.stringify(value);		
-								} catch(e) {
-									return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
-								}
-							} else {
-								if((value != "") && (!value.match(re))) {
-									return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
-								}
-							}
-						} 
-						break;
-					case "LIST" :
-					case "OPTION" :
-			
-						if (value != '') {
-							var inpStrArr= recSch[s].listVal.split('|');
-							var chk=0;
-							var values = new Array();
-							inpStrArr.forEach(function(obj, index) { if (index%2 == 1) { values.push(obj)} });
-							if (!values.some(function(elem) {  return elem == value; }))	 {
-								return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " value : [" + value + "] expected: " + JSON.stringify(values));
-							}
-						}
+				if (hasChild(recSch[s])) {
+					if ( typeof value != "object") {
+						return new Error("Expected object  for  dataType  " + recSch[0].dataType + " of " + recSch[s].name +" but found is " + typeof value);
 					}
+					var err=valWithSch(recSch[s].childs,value);
+					if (err)  {
+						return err;
+					}
+				} else  {
+
+					if ((recSch[s].mndf == "Y") && ((value == null) || (value == undefined))) { 
+						return new Error(recSch[s].name + " is mandatory [" + value +"]");
+					}
+
+					if ((typeof value != "object") && (recSch[s].dataType == "JSON") && (recSch[s].dimensions == "" )) {
+						return new Error("Object type is expected for JSON object: dataType:" + recSch[s].dataType + ", name:" + recSch[s].name + ", dimensions: " + recSch[s].dimensions);
+					}	
+
+					if ((recSch[s].dimensions == 1) && (!Array.isArray(value))) {
+						return new Error("Array type is expected for dimensions:" + recSch[s].dimensions);
+					}
+		
+					if (Array.isArray(value)) {
+						value.forEach(function(valueObj) {
+							var rtErr=doDataValidate(valueObj, recSch, s);
+							if (rtErr != null) {
+								return rtErr;
+							}
+						});
+					} else {
+						var rtErr=doDataValidate(value, recSch, s);
+						if (rtErr != null) {
+							return rtErr;
+						}
+
+					}
+		
 				}
 			}
 		}
 		return null;
 }
 
+function doDataValidate(value, recSch, s) {
+value = new String(value);
+switch (recSch[s].dataType) {
+case "DATE" : 
+re = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+if((value != '') && (!value.match(re))) {
+return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
+}
+break;
+case "TIME" :
+re = /^\d{1,2}:\d{2}([ap]m)?$/;
+if(value != '' && !value.match(re)) {
+return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
+}
+break;
+case "NUMBER" :
+if (recSch[s].max != "unlimited") {
+re = RegExp("^[0-9.]{"+ recSch[s].min + "," + recSch[s].max + "}$");
+			if(value != '' && !re.test(value)) {
+				return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
+			}
+		} else {
+			re =/^[A-Za-z0-9_]$/;
+			if(value != '' && !value.match(re)) {
+				return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
+			}
+		}
+		break;
+	case "VARCHAR" :
+		if (recSch[s].max != "unlimited") {
+			re = RegExp("^[A-Za-z0-9_\.\\s]{"+ recSch[s].min + "," + recSch[s].max + "}$");
+			//console.log(typeof value);
+			//console.log(value);
+			if(value != '' && !value.match(re)) {
+				return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
+			}
+		} else {
+			re =/^[A-Za-z0-9_\s]+$/;
+			//TODO: handle object 
+			if(typeof value == "object") {
+				try {
+					JSON.stringify(value);		
+				} catch(e) {
+					return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
+				}
+			} else {
+				if((value != "") && (!value.match(re))) {
+					return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " format: [" + value + "]");
+				}
+			}
+		} 
+		break;
+	case "LIST" :
+	case "OPTION" :
+
+		if (value != '') {
+			var inpStrArr= recSch[s].listVal.split('|');
+			var chk=0;
+			var values = new Array();
+			inpStrArr.forEach(function(obj, index) { if (index%2 == 1) { values.push(obj)} });
+			if (!values.some(function(elem) {  return elem == value; }))	 {
+				return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " value : [" + value + "] expected: " + JSON.stringify(values));
+			}
+		}
+	}
+	return null;
+}
 exports.valWithSch=valWithSch;
 exports.validateUssField=validateUssField;

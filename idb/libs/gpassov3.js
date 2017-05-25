@@ -133,6 +133,7 @@ module.exports.mongoose=mongoose;
  GPASSO_PROD001MT.index({ 
     _id : 1 
 });
+
  var GPASSO_PROD001MT_Model = mongoose.model('GPASSO_PROD001MT', GPASSO_PROD001MT); 
  module.exports.GPASSO_PROD001MT_Model = GPASSO_PROD001MT_Model; 
  
@@ -157,4 +158,22 @@ GPASSO_SRVS006MT.index({
 });
  var GPASSO_SRVS006MT_Model = mongoose.model('GPASSO_SRVS006MT', GPASSO_SRVS006MT); 
  module.exports.GPASSO_SRVS006MT_Model = GPASSO_SRVS006MT_Model; 
+ 
+ var GPASSO_MAIL001MT  = new Schema({
+  mkrId: { type: Number, unique: false, required: false, default: ''  } 
+, dtCreated: { type: Date, unique: false, required: false, default: ''  } 
+, athId: { type: Number, unique: false, required: false, default: ''  } 
+, dtModified: { type: Date, unique: false, required: false, default: ''  } 
+, headers: []
+, headers_decoded: []
+, header_list: []
+, body: []
+, attachments: []
+});
+
+GPASSO_MAIL001MT.index({ 
+    _id : 1 
+});
+ var GPASSO_MAIL001MT_Model = mongoose.model('GPASSO_MAIL001MT', GPASSO_MAIL001MT); 
+ module.exports.GPASSO_MAIL001MT_Model = GPASSO_MAIL001MT_Model; 
  
