@@ -160,7 +160,8 @@ GPASSO_SRVS006MT.index({
  module.exports.GPASSO_SRVS006MT_Model = GPASSO_SRVS006MT_Model; 
  
  var GPASSO_MAIL001MT  = new Schema({
-  mkrId: { type: Number, unique: false, required: false, default: ''  } 
+  uuid: { type: String, unique: true, required: true, default: ''  } 
+, mkrId: { type: Number, unique: false, required: false, default: ''  } 
 , dtCreated: { type: Date, unique: false, required: false, default: ''  } 
 , athId: { type: Number, unique: false, required: false, default: ''  } 
 , dtModified: { type: Date, unique: false, required: false, default: ''  } 

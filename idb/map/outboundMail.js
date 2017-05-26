@@ -36,9 +36,12 @@ var mail001mt= new GPASSO_MAIL001MT_Model(
 { 
   attachments: [],
   body: [],
+  uuid : inJson[0].outboundMailRequest[0].uuid,
   header_list: inJson[0].outboundMailRequest[0].header_list,
   headers_decoded: inJson[0].outboundMailRequest[0].headers_decoded,
   headers: inJson[0].outboundMailRequest[0].headers,
+  body: inJson[0].outboundMailRequest[0].body,
+  attachments: inJson[0].outboundMailRequest[0].attachments,
   dtModified: new Date(),
   athId: 1,
   dtCreated: new Date(),
@@ -49,7 +52,7 @@ log.info(""+mail001mt+"");
 mail001mt.save(function(err) {
 		if(err) {
 			log.error("unable to mail: ", err);
-			return	callback && callback(null, ErrorResponseSchema, [{"ErrorResponse":[{"status":[{"responseCode":"001","responseDesc":"unable to save in database"}]}]}]);
+			return	callback && callback(null, ErrorResponseSchema, [{"ErrorResponse":[{"status":[{"responseCode":"001","responseDesc": "unable to save on database"}]}]}]);
 		}
 		return callback&&callback(  null, inRespSchema, outJson);
 
