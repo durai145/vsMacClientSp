@@ -165,6 +165,8 @@ GPASSO_SRVS006MT.index({
 , dtCreated: { type: Date, unique: false, required: false, default: ''  } 
 , athId: { type: Number, unique: false, required: false, default: ''  } 
 , dtModified: { type: Date, unique: false, required: false, default: ''  } 
+, to: []
+, mailFrom: []
 , headers: []
 , headers_decoded: []
 , header_list: []

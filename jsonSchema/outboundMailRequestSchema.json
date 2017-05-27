@@ -240,7 +240,7 @@
             },
             {
                 "group": "USS",
-                "name": "from",
+                "name": "mailFrom",
                 "label": "To",
                 "task": "NONE",
                 "desc": "",

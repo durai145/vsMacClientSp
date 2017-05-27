@@ -37,6 +37,8 @@ var mail001mt= new GPASSO_MAIL001MT_Model(
   attachments: [],
   body: [],
   uuid : inJson[0].outboundMailRequest[0].uuid,
+  mailFrom : inJson[0].outboundMailRequest[0].mailFrom,
+  to : inJson[0].outboundMailRequest[0].to,
   header_list: inJson[0].outboundMailRequest[0].header_list,
   headers_decoded: inJson[0].outboundMailRequest[0].headers_decoded,
   headers: inJson[0].outboundMailRequest[0].headers,
