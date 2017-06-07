@@ -1,0 +1,6 @@
+{
+"grantType" : "password"
+, "clientId" : "CLIENTSP
+, "scope":"GPA"
+, "iotRequest" : "[{\"iotRequest\":[{\"appTest\":[{\"value\":\"3\"}] }  ]}]"
+}

@@ -26,6 +26,7 @@ Promise = require('bluebird'),
 request = Promise.promisify(require('request'));
 var secretkey = "KEY1";
 var sessionExpSec = 60*15;
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ limit: '100mb' , extended: true }));
 //app.use(express.bodyParser({limit: '50mb'}));
 app.use(device.capture());

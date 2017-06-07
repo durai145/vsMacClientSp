@@ -47,6 +47,13 @@ exports.mapper=
 		,pageMethod: 'POST'	
 		,map: 'outboundMail'
 }
+,'iot' : {
+		pageId: 'postVibration'
+		,pageModel: 'CDR'
+		,pageMethod: 'POST'	
+		,map: 'iot'
+
+}
 ,'ServiceDetails' : {
 		pageId: 'UserDetails'
 		,pageModel: 'CDR'

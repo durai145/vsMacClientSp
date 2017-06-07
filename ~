@@ -185,8 +185,8 @@ GPASSO_MAIL001MT.index({
 , dtCreated: { type: Date, unique: false, required: false, default: ''  } 
 , athId: { type: Number, unique: false, required: false, default: ''  } 
 , dtModified: { type: Date, unique: false, required: false, default: ''  } 
-, deviceName: { type: String, unique: false, dropDups: true, required: true, default: ''  } 
-, vibration: { type: String, unique: false, dropDups: true, required: true, default: ''  } 
+, deviceName: { type: String, unique: true, dropDups: true, required: true, default: ''  } 
+, value: { type: String, unique: false, dropDups: true, required: true, default: ''  } 
 });
 
 GPASSO_IOT006MT.index({ 
