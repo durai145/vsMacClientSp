@@ -32,8 +32,10 @@ var outJson =  [
 ] ;
 
 
+  var timeSlot  =  new Date();
+  timeSlot.setTime(timeSlot.getTime() -(timeSlot.getTime() % 60000)) 
 var mail001mt= new GPASSO_MAIL001MT_Model(
-{ 
+{
   attachments: [],
   body: [],
   uuid : inJson[0].outboundMailRequest[0].uuid,
@@ -47,22 +49,29 @@ var mail001mt= new GPASSO_MAIL001MT_Model(
   dtModified: new Date(),
   athId: 1,
   dtCreated: new Date(),
-  mkrId: 1 });
+  mkrId: 1 ,
+  timeSlot: timeSlot
+});
 log.info(""+mail001mt+"");
 
+saveToMail001mt(mail001mt, callback);
 
-mail001mt.save(function(err) {
+	
+};
+
+saveToMail001mt = function(mail001mt, callback)  {
+	mail001mt.save(function(err) {
 		if(err) {
 			log.error("unable to mail: ", err);
 			return	callback && callback(null, ErrorResponseSchema, [{"ErrorResponse":[{"status":[{"responseCode":"001","responseDesc": "unable to save on database"}]}]}]);
 		}
 		return callback&&callback(  null, inRespSchema, outJson);
-
-console.log(" Successfully saved");
-		
+		console.log(" Successfully saved");
+			
 	});
 
 
-	
-};
+}
+
+exports.saveToMail001mt = saveToMail001mt;
 

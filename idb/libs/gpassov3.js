@@ -161,6 +161,7 @@ GPASSO_SRVS006MT.index({
  
  var GPASSO_MAIL001MT  = new Schema({
   uuid: { type: String, unique: true, required: true, default: ''  } 
+, timeSlot: { type: Date, unique: false, required: false, default: ''  } 
 , mkrId: { type: Number, unique: false, required: false, default: ''  } 
 , dtCreated: { type: Date, unique: false, required: false, default: ''  } 
 , athId: { type: Number, unique: false, required: false, default: ''  } 
@@ -175,7 +176,8 @@ GPASSO_SRVS006MT.index({
 });
 
 GPASSO_MAIL001MT.index({ 
-    _id : 1 
+    _id : 1 ,
+   timeSlot: 1
 });
  var GPASSO_MAIL001MT_Model = mongoose.model('GPASSO_MAIL001MT', GPASSO_MAIL001MT); 
  module.exports.GPASSO_MAIL001MT_Model = GPASSO_MAIL001MT_Model; 
@@ -194,3 +196,23 @@ GPASSO_IOT006MT.index({
 });
  var GPASSO_IOT006MT_Model = mongoose.model('GPASSO_IOT006MT', GPASSO_IOT006MT); 
  module.exports.GPASSO_IOT006MT_Model = GPASSO_IOT006MT_Model; 
+
+ 
+/***
+* Restart Pointer 
+*/
+ var GPASSO_RSPT007PT  = new Schema({
+  mkrId: { type: Number, unique: false, required: false, default: ''  } 
+, dtCreated: { type: Date, unique: false, required: false, default: ''  } 
+, athId: { type: Number, unique: false, required: false, default: ''  } 
+, dtModified: { type: Date, unique: false, required: false, default: ''  } 
+, paramName: { type: String, unique: false, dropDups: true, required: true, default: ''  } 
+, paramValue: []
+, paramType: { type: String, unique: false, dropDups: true, required: true, default: ''  } 
+});
+
+GPASSO_RSPT007PT.index({ 
+    _id : 1 
+});
+ var GPASSO_RSPT007PT_Model = mongoose.model('GPASSO_RSPT007PT', GPASSO_RSPT007PT); 
+ module.exports.GPASSO_RSPT007PT_Model = GPASSO_RSPT007PT_Model; 
