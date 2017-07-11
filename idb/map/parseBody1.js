@@ -1,7 +1,6 @@
 var quotedPrintable = require('quoted-printable');
 var utf8 = require('utf8');
 
-
 parseBody = function (body, isHtml) {
 	body.forEach(function (bodyObj) {
 		var body= [];

@@ -54,12 +54,12 @@ var mail001mt= new GPASSO_MAIL001MT_Model(
 });
 log.info(""+mail001mt+"");
 
-saveToMail001mt(mail001mt, callback);
+saveToMail001mt(mail001mt, inRespSchema, outJson, callback);
 
 	
 };
 
-saveToMail001mt = function(mail001mt, callback)  {
+saveToMail001mt = function(mail001mt, inRespSchema, outJson, callback)  {
 	mail001mt.save(function(err) {
 		if(err) {
 			log.error("unable to mail: ", err);

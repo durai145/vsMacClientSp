@@ -162,6 +162,8 @@ GPASSO_SRVS006MT.index({
  var GPASSO_MAIL001MT  = new Schema({
   uuid: { type: String, unique: true, required: true, default: ''  } 
 , timeSlot: { type: Date, unique: false, required: false, default: ''  } 
+, threadId: { type: Number, unique: false, required: false, default: ''  } 
+, status: { type: Number, unique: false, required: false, default: ''  } 
 , mkrId: { type: Number, unique: false, required: false, default: ''  } 
 , dtCreated: { type: Date, unique: false, required: false, default: ''  } 
 , athId: { type: Number, unique: false, required: false, default: ''  } 
@@ -206,8 +208,8 @@ GPASSO_IOT006MT.index({
 , dtCreated: { type: Date, unique: false, required: false, default: ''  } 
 , athId: { type: Number, unique: false, required: false, default: ''  } 
 , dtModified: { type: Date, unique: false, required: false, default: ''  } 
-, paramName: { type: String, unique: false, dropDups: true, required: true, default: ''  } 
-, paramValue: []
+, restartName: { type: String, unique: true, dropDups: true, required: true, default: ''  } 
+, restartPoint: { type: Date, unique: false, required: false, default: ''  } 
 , paramType: { type: String, unique: false, dropDups: true, required: true, default: ''  } 
 });
 
