@@ -23,7 +23,7 @@ var inRespSchema = [], outJson= [];
 saveToRspt007pt = function(rspt007pt, callback) {
         rspt007pt.save(function(err) {
                 if(err) {
-                        log.error("unable to save: ", err);
+				log.error("unable to save: ", err);
                         return  callback && callback(null, ErrorResponseSchema, [{"ErrorResponse":[{"status":[{"responseCode":"001","responseDesc": "unable to save on database"}]}]}]);
                 }
                 return callback&&callback(  null, inRespSchema, outJson);
@@ -38,55 +38,61 @@ GPASSO_RSPT007PT_Model.findOne({"restartName" : "MAIL_PROCESS_RESTART"}, functio
 	if (err) {
 		console.log("Error", err);	
 	}
-
-	var timeSlot  =  new Date();
+// ((parseInt(d.getTime()/60000)) * 60000) - 60000
+	var startTimeSlot  =  new Date();
+	var endTimeSlot  =  new Date();
+	endTimeSlot.setTime(((parseInt(startTimeSlot.getTime()/60000)) * 60000) - 60000)
 	if (restartPointObj == null) {
 		log.info("No record found", restartPointObj);
-		timeSlot.setTime(timeSlot.getTime() -(timeSlot.getTime() % 60000))
+		startTimeSlot.setTime(((parseInt(startTimeSlot.getTime()/60000)) * 60000) - 60000)
 	} else {
 		log.info("Record found", restartPointObj.restartPoint);
-		timeSlot = restartPointObj.restartPoint
+		startTimeSlot = restartPointObj.restartPoint
 	}
-	log.info ("timeSlot" + timeSlot);
-	GPASSO_MAIL001MT_Model.find({timeSlot:{ $gte:timeSlot}}, function (mailArr) {	
+	log.info("startTimeSlot:" + startTimeSlot.toISOString() + ", endTimeSlot:" + endTimeSlot.toISOString());
+	//GPASSO_MAIL001MT_Model.find({timeSlot:{ $and: {$gte: startTimeSlot, $lte : endTimeSlot}}}, function (err, mailArr) {	
+	GPASSO_MAIL001MT_Model.find({$and: [{timeSlot: {$gte: startTimeSlot}},{timeSlot:{$lte : endTimeSlot}}]}, function (err, mailArr) {	
 	
-		console.log(mailArr);
-
-	});
-
-	var rspt = new GPASSO_RSPT007PT_Model({ 
-	  paramType: 'DATE',
-	  restartPoint: timeSlot ,
-	  restartName: 'MAIL_PROCESS_RESTART',
-	  dtModified: new Date(),
-	  athId: 2,
-	  dtCreated: new Date(),
-	  mkrId: 2 }
-	);
-/*
-	updateRespt007pt( rspt, timeSlot, function(err) {
 		if (err) {
-			console.log("Error :", err);
+			log.error("Error", err);
 		}
-
-	});
-*/
-
-	if (restartPointObj  == null) {
-		log.info("call saveToRspt007pt");
-		saveToRspt007pt(rspt, function(err) {
+	
+		log.info ("startTimeSlot:" + startTimeSlot.toISOString());
+		console.log(mailArr);
+		var rspt = new GPASSO_RSPT007PT_Model({ 
+		  paramType: 'DATE',
+		  restartPoint: startTimeSlot,
+		  restartName: 'MAIL_PROCESS_RESTART',
+		  dtModified: new Date(),
+		  athId: 2,
+		  dtCreated: new Date(),
+		  mkrId: 2 }
+		);
+		log.info ("endTimeSlot:" + endTimeSlot);
+		updateRespt007pt( rspt, endTimeSlot, function(err) {
 			if (err) {
 				console.log("Error :", err);
 			}
+
 		});
-	}
-	
-	
+
+		if (restartPointObj  == null) {
+			log.info("call saveToRspt007pt");
+			saveToRspt007pt(rspt, function(err) {
+				if (err) {
+					console.log("Error :", err);
+				}
+			});
+		}
+		
+
+	});
+
 	 
 });
 
 updateRespt007pt = function (rspt, timeSlot, callback) {
-	rspt.update({ restartName : "MAIL_PROCESS_RESTART"} , 
+	GPASSO_RSPT007PT_Model.update({ restartName : "MAIL_PROCESS_RESTART"} , 
 		{$set:{restartPoint : timeSlot}}, 
 	/*	{ multi: true, writeConcern: { w: "majority", wtimeout: 5000 }}, */
 		function(err, resp) {
