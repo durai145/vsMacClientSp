@@ -33,7 +33,7 @@ var outJson =  [
 
 
   var timeSlot  =  new Date();
-  timeSlot.setTime(((parseInt(startTimeSlot.getTime()/60000)) * 60000) - 60000) 
+  timeSlot.setTime(((parseInt(timeSlot.getTime()/60000)) * 60000) - 60000) 
 var mail001mt= new GPASSO_MAIL001MT_Model(
 {
   attachments: [],
