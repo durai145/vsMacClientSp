@@ -17,7 +17,10 @@ var ErrorResponseSchema = require('../../jsonSchema/ErrorResponseSchema.json');
 var GPASSO_MAIL001MT_Model   = require('../libs/gpassov3').GPASSO_MAIL001MT_Model;
 var GPASSO_RSPT007PT_Model   = require('../libs/gpassov3').GPASSO_RSPT007PT_Model;
 
-
+var parseBody = require("./parseBody1");
+var quotedPrintable = require('quoted-printable');
+var utf8 = require('utf8');
+var uuid= require("uuid/v1");
 
 var inRespSchema = [], outJson= [];
 saveToRspt007pt = function(rspt007pt, callback) {
@@ -38,7 +41,6 @@ GPASSO_RSPT007PT_Model.findOne({"restartName" : "MAIL_PROCESS_RESTART"}, functio
 	if (err) {
 		console.log("Error", err);	
 	}
-// ((parseInt(d.getTime()/60000)) * 60000) - 60000
 	var startTimeSlot  =  new Date();
 	var endTimeSlot  =  new Date();
 	endTimeSlot.setTime(((parseInt(startTimeSlot.getTime()/60000)) * 60000) - 60000)
@@ -50,15 +52,42 @@ GPASSO_RSPT007PT_Model.findOne({"restartName" : "MAIL_PROCESS_RESTART"}, functio
 		startTimeSlot = restartPointObj.restartPoint
 	}
 	log.info("startTimeSlot:" + startTimeSlot.toISOString() + ", endTimeSlot:" + endTimeSlot.toISOString());
-	//GPASSO_MAIL001MT_Model.find({timeSlot:{ $and: {$gte: startTimeSlot, $lte : endTimeSlot}}}, function (err, mailArr) {	
 	GPASSO_MAIL001MT_Model.find({$and: [{timeSlot: {$gte: startTimeSlot}},{timeSlot:{$lte : endTimeSlot}}]}, function (err, mailArr) {	
 	
 		if (err) {
 			log.error("Error", err);
 		}
-	
-		log.info ("startTimeSlot:" + startTimeSlot.toISOString());
+		
 		console.log(mailArr);
+		mailArr.forEach(function (mailObj) {
+
+			parsedMail = parseBody.parseBody(mailObj.body, true);
+/*
+			{ 
+				uuid : "",
+			 	msgId : "",
+				replyId : "",
+				linkId : "",
+				subject : "",
+				shortBody : "",
+				receivedDate : "",
+				sentDate : "",
+				fromList : [],
+				to : [],
+				isNew : true,
+				isFlag : true,
+				hasAttachment : false,
+				
+			}
+*/
+	
+			console.log("parsedMail:");
+			console.log(JSON.stringify(parsedMail));
+			
+
+		});
+
+
 		var rspt = new GPASSO_RSPT007PT_Model({ 
 		  paramType: 'DATE',
 		  restartPoint: startTimeSlot,

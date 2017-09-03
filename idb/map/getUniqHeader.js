@@ -10,6 +10,7 @@ parseBody = function (body, isHtml) {
 			header.body = header.body || [];
 			header.body.push(parseContext(bodyObj.childern, isHtml));
 		} else if (bodyObj.state == "body") {
+			header = bodyObj.header.headers_decoded;
 			header.body = header.body || [];
 			header.body.push(parseContext(bodyObj.childern, isHtml));
 		} 
