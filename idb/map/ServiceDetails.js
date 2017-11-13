@@ -21,7 +21,7 @@ exports.getServiceDetails=function(inSchema, inJson, inRespSchema, callback) {
 		return callback(inSchema,outJson);
 	}
 	if ((srvs006mt.length === undefined)||(srvs006mt.length == 0)) {
-		return	callback(new Error("No data found"));
+		return	callback(new Error("No data found [ page_key=" + inJson[0].ServiceDetails[0].serviceName + "]"));
 		
 	}
 

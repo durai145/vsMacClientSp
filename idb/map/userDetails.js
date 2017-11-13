@@ -23,7 +23,7 @@ var userDetails = inJson[0].isValidUserRequest[0].userDetails[0];
 var portalDeatils = inJson[0].isValidUserRequest[0].portalDetails[0];
 
 log.info("calling GPASSO_SSID003MT_Model");
-GPASSO_SSID003MT_Model.findOne({"emailId": userDetails.emailId},function (err, ssid) {
+GPASSO_SSID003MT_Model.findOne({$or : [{"emailId": userDetails.emailId}, {"empId": userDetails.emailId}]},function (err, ssid) {
 				
 				if(err) {
 					log.error("in doLogin:" , err);
@@ -31,7 +31,7 @@ GPASSO_SSID003MT_Model.findOne({"emailId": userDetails.emailId},function (err, s
 				} else {
 					if (ssid == null) {
 					//	return callback&&callback(null, ErrorResponseSchema, [{"ErrorResponse":[{"status":[{"responseCode":"002","responseDesc":"Username / password is wrong"}]}]}] );
-						return callback&&callback(new AuthorizationFailure("Usernmae / Password is wrong"));
+						return callback&&callback(new AuthorizationFailure("Username/EmailId is wrong[userDetails.emailId=" + userDetails.emailId +"]" ));
 					}
 					 
 					
