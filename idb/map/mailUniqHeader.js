@@ -35,9 +35,9 @@ mailBox=function(inSchema, inJson, inRespSchema, callback) {
 	GPASSO_MAIL001MT_Model.find({ "to" : [
 		{
 			"user" : "jayagopal.govindaraj",
-			"host" : "myroomexpense.com",
-			"original_host" : "myroomexpense.com",
-			"original" : "<jayagopal.govindaraj@myroomexpense.com>"
+			"host" : "heaerieglobalsolutions.com",
+			"original_host" : "heaerieglobalsolutions.com",
+			"original" : "<jayagopal.govindaraj@heaerieglobalsolutions.com>"
 		}
 	] 
 

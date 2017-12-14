@@ -1,0 +1,62 @@
+[32minfo[39m: [idb/InvokeDB.js] call InvokeDB:001
+[32minfo[39m: [idb/InvokeDB.js] InvokeDB:IDB.001 valWithSch
+[32minfo[39m: [idb/InvokeDB.js] InvokeDB:IDB.002 mapper pageId:ServiceDetails
+[32minfo[39m: [idb/InvokeDB.js] InvokeDB:IDB.002 mapper pageType:saveServiceDetails
+Mongoose: mpromise (mongoose's default promise library) is deprecated, plug in your own promise library instead: http://mongoosejs.com/docs/promises.html
+[32minfo[39m: [idb/InvokeDB.js] InvokeDB:IDB.003 after
+calling InvokeDB:003
+Listening on port 5000
+[32minfo[39m: [libs/gpassov3.js] Connected to DB!
+[31merror[39m: [map/ServiceDetails.js] unable to save service:  MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: test.gpasso_page005mts.$pageKey_1  dup key: { : "loginDetails" }
+    at Function.MongoError.create (/home/ubuntu/node/clientsp/idb/node_modules/mongoose/node_modules/mongodb-core/lib/error.js:31:11)
+    at toError (/home/ubuntu/node/clientsp/idb/node_modules/mongoose/node_modules/mongodb/lib/utils.js:139:22)
+    at /home/ubuntu/node/clientsp/idb/node_modules/mongoose/node_modules/mongodb/lib/collection.js:659:23
+    at handleCallback (/home/ubuntu/node/clientsp/idb/node_modules/mongoose/node_modules/mongodb/lib/utils.js:120:56)
+    at /home/ubuntu/node/clientsp/idb/node_modules/mongoose/node_modules/mongodb/lib/bulk/unordered.js:465:9
+    at handleCallback (/home/ubuntu/node/clientsp/idb/node_modules/mongoose/node_modules/mongodb/lib/utils.js:120:56)
+    at resultHandler (/home/ubuntu/node/clientsp/idb/node_modules/mongoose/node_modules/mongodb/lib/bulk/unordered.js:413:5)
+    at /home/ubuntu/node/clientsp/idb/node_modules/mongoose/node_modules/mongodb-core/lib/connection/pool.js:461:18
+    at nextTickCallbackWith0Args (node.js:419:9)
+    at process._tickCallback (node.js:348:13)
+[32minfo[39m: [idb/InvokeDB.js] InvokeDB:I.001
+[32minfo[39m: [idb/InvokeDB.js] call InvokeDB:I.002
+[32minfo[39m: [idb/InvokeDB.js] call InvokeDB:I.003
+[{"ErrorResponse":[{"status":[{"responseCode":"001","responseDesc":"unable to save in database"}]}]}]
+[32minfo[39m: [clientsp/app.js] req.params.task: isValidUser req.params.module userDetails
+[32minfo[39m: [clientsp/app.js] calling clientParamInp
+[32minfo[39m: [clientsp/app.js] calling InvokeDB for serviceDetails
+[32minfo[39m: [idb/InvokeDB.js] InvokeDB:IDB.001 valWithSch
+[32minfo[39m: [idb/InvokeDB.js] InvokeDB:IDB.002 mapper pageId:ServiceDetails
+[32minfo[39m: [idb/InvokeDB.js] InvokeDB:IDB.002 mapper pageType:getServiceDetails
+[32minfo[39m: [idb/InvokeDB.js] InvokeDB:IDB.003 after
+[32minfo[39m: [clientsp/app.js] calling validate response 
+[32minfo[39m: [clientsp/app.js] calling validate response 
+[32minfo[39m: [clientsp/app.js] params:undefined
+[32minfo[39m: [clientsp/app.js] body:password
+[32minfo[39m: [clientsp/app.js] params:undefined
+[32minfo[39m: [clientsp/app.js] body:CLIENTSP
+[32minfo[39m: [clientsp/app.js] params:undefined
+[32minfo[39m: [clientsp/app.js] body:GPA
+[32minfo[39m: [clientsp/app.js]  paramObj:  respCode=0, respDescr=, accessToken=undefined, userName=, error=, grantType=password, isAccessTokenFound=true, clientId=CLIENTSP, isClientIdFound=true, isValidGrantType=true, isScopeFound=true, redirectURI=, scope=, state=undefined, SCOPE=GPA
+[32minfo[39m: [clientsp/app.js] currentService.reqSjson[0].name =isValidUserRequest
+[32minfo[39m: [clientsp/app.js] params:undefined
+[32minfo[39m: [clientsp/app.js] body:[{"isValidUserRequest":[{"userDetails":[{"emailId":"H1450003"}], "portalDetails":[{"portalKey":"Member Portal"}]}]}];
+[32minfo[39m: [clientsp/app.js] param =[{"isValidUserRequest":[{"userDetails":[{"emailId":"H1450003"}], "portalDetails":[{"portalKey":"Member Portal"}]}]}];
+[32minfo[39m: [clientsp/app.js] req.param:{"module":"userDetails","task":"isValidUser"}
+[32minfo[39m: [clientsp/app.js] req.body:{"grantType":"password","clientId":"CLIENTSP","scope":"GPA","isValidUserRequest":"[{\"isValidUserRequest\":[{\"userDetails\":[{\"emailId\":\"H1450003\"}], \"portalDetails\":[{\"portalKey\":\"Member Portal\"}]}]}];"}
+[32minfo[39m: [clientsp/app.js] params:undefined
+[32minfo[39m: [clientsp/app.js] body:[{"isValidUserRequest":[{"userDetails":[{"emailId":"H1450003"}], "portalDetails":[{"portalKey":"Member Portal"}]}]}];
+[32minfo[39m: [clientsp/app.js] validate input
+[32minfo[39m: [clientsp/app.js] call api mapper.. [{"isValidUserRequest":[{"userDetails":[{"emailId":"H1450003"}],"portalDetails":[{"portalKey":"Member Portal"}]}]}]
+[32minfo[39m: [idb/InvokeDB.js] InvokeDB:IDB.001 valWithSch
+[32minfo[39m: [idb/InvokeDB.js] InvokeDB:IDB.002 mapper pageId:userDetails
+[32minfo[39m: [idb/InvokeDB.js] InvokeDB:IDB.002 mapper pageType:isValidUser
+[32minfo[39m: [map/userDetails.js] calling GPASSO_SSID003MT_Model
+[32minfo[39m: [idb/InvokeDB.js] InvokeDB:IDB.003 after
+[31merror[39m: [clientsp/app.js] API  InvokeDB : AuthorizationFailure: Username/EmailId is wrong[userDetails.emailId=H1450003]
+    at /home/ubuntu/node/clientsp/idb/map/userDetails.js:34:33
+    at Query.<anonymous> (/home/ubuntu/node/clientsp/idb/node_modules/mongoose/lib/model.js:3702:16)
+    at /home/ubuntu/node/clientsp/idb/node_modules/kareem/index.js:273:21
+    at /home/ubuntu/node/clientsp/idb/node_modules/kareem/index.js:127:16
+    at nextTickCallbackWith0Args (node.js:419:9)
+    at process._tickCallback (node.js:348:13)

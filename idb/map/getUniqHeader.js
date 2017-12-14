@@ -14,8 +14,6 @@ parseBody = function (body, isHtml) {
 			header.body = header.body || [];
 			header.body.push(parseContext(bodyObj.childern, isHtml));
 		} 
-
-
 	});
 	return header;	
 };
@@ -23,9 +21,10 @@ parseBody = function (body, isHtml) {
 parseContext = function(body, isHtml) {
 	var bodyList = new Array();
 	body.forEach(function (bodyObj) {
-		if (bodyObj.state == "end") {
-			throw new Error("end state found on child");
-		} 
+//		console.log(bodyObj);
+//		if (bodyObj.state == "end") {
+//			throw new Error("end state found on child");
+//		} 
 	
 		if (bodyObj.is_htmal == isHtml) {
 			try  {
