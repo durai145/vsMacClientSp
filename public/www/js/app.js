@@ -13,30 +13,23 @@ define([
 ], function (angular) {
     'use strict';
 
-
-
-
-    var webApp= angular.module('app', [
-         'app.controllers'
-        ,'app.directives'
-        ,'app.filters'
-        ,'app.services'
-        ,'ngRoute'
+    var webApp = angular.module('app', [
+        'app.controllers'
+        , 'app.directives'
+        , 'app.filters'
+        , 'app.services'
+        , 'ngRoute'
     ]);
 
-
-    webApp.config('$routeProvider', '$locationProvider', '$httpProvider',function  ($routeProvider,$locationProvider,$httpProvider) {
+    webApp.config('$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
         // body...
- 
-    //$httpProvider.defaults.headers.post['XSRF-AUTH'] = "some accessToken to be generated later"; 
+
+        //$httpProvider.defaults.headers.post['XSRF-AUTH'] = "some accessToken to be generated later"; 
 
         console.log('httpProvider');
         console.log($httpProvider);
-    $httpProvider.defaults.headers.post['x-access-token'] = "access token";
-        
-        });
+        $httpProvider.defaults.headers.post['x-access-token'] = "access token";
 
-  
-
+    });
     return webApp;
 });

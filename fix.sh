@@ -38,9 +38,9 @@ sudo npm install    errorhandler        - previously error-handler
 sudo npm install    express-session         - previously session
 sudo npm install    method-override     - previously method-override
 sudo npm install    morgan              - previously logger
-sudo npm install    response-time       - previously response-time
+sudo npm install    response-time       - previously response-tim
+sudo npmnpm  install    serve-index         - previously directorye
 sudo npm install    serve-favicon           - previously favicon
-sudo npm install    serve-index         - previously directory
 sudo npm install    serve-static        - previously static
 sudo npm install    vhost                   - previously vhost
 
@@ -53,7 +53,7 @@ sudo npm install    errorhandler
 sudo npm install    express-session    
 sudo npm install    method-override    
 sudo npm install    morgan             
-sudo npm install    response-time      
+sudo install    response-time      
 sudo npm install    serve-favicon      
 sudo npm install    serve-index        
 sudo npm install    serve-static       
