@@ -21,11 +21,11 @@ exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
 			prtlVersion: '001',
 			prtlName: 'Member Portal'
 		}, function (err, prtl) {
-
+			//dob can be added
 			var ssid = new GPASSO_SSID003MT_Model({
 				userRole: 'Internal',
 				userType: 'Member',
-				empId: 'H1450003',
+				empId: 'H1450004',
 				emailId: 'sakthi.govindaraj',
 				password: '1qaz2wsx',
 				username: 'H1450003',
@@ -43,38 +43,38 @@ exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
 				roleName: 'SEC_ADMIN'
 			}, function (err, role) {
 
+				GPASSO_SSID003MT_Model.find({
+					lastName: ssid.lastName,
+					firstName: ssid.firstName,
+					emailId: ssid.emailId
+				}, function (err, dupSid) {
 
-
-				ssid.save(function (err) {
 					if (err) {
-						callback && callback(err, {
-							"status": "Unable to save ssid : [" + ssid + "]"
+
+					}
+
+					if (dupSid.length != 0) {
+						callback && callback(new Error("Duplcate Check"), {
+							"status": "Already exists"
 						});
 					}
-					console.log("ssid saved");
 
 
-					console.log(role);
-					role.usrIds.push(ssid);
-					prod.usrIds.push(ssid);
-					GPASSO_ROLE003MT_Model.update({
-						"status": "ACTIVE",
-						"roleName": "SEC_ADMIN"
-					}, {
-						$addToSet: {
-							"usrIds": ssid.id
-						}
-					}, function (err) {
+					ssid.save(function (err) {
 						if (err) {
 							callback && callback(err, {
-								"status": "Unable to save role : [" + role + "]"
+								"status": "Unable to save ssid : [" + ssid + "]"
 							});
 						}
-						console.log("role saved");
+						console.log("ssid saved");
 
-						GPASSO_PROD001MT_Model.update({
-							prodVersion: '1',
-							prodName: 'GLOBAL_PROD_ADMIN'
+
+						console.log(role);
+						role.usrIds.push(ssid);
+						prod.usrIds.push(ssid);
+						GPASSO_ROLE003MT_Model.update({
+							"status": "ACTIVE",
+							"roleName": "SEC_ADMIN"
 						}, {
 							$addToSet: {
 								"usrIds": ssid.id
@@ -85,13 +85,30 @@ exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
 									"status": "Unable to save role : [" + role + "]"
 								});
 							}
-							console.log("prod saved");
-							callback && callback(new Error("Schema"), {
-								"status": "Saved"
-							})
+							console.log("role saved");
+
+							GPASSO_PROD001MT_Model.update({
+								prodVersion: '1',
+								prodName: 'GLOBAL_PROD_ADMIN'
+							}, {
+								$addToSet: {
+									"usrIds": ssid.id
+								}
+							}, function (err) {
+								if (err) {
+									callback && callback(err, {
+										"status": "Unable to save role : [" + role + "]"
+									});
+								}
+								console.log("prod saved");
+								callback && callback(new Error("Schema"), {
+									"status": "Saved"
+								})
+
+							});
+
 
 						});
-
 
 					});
 					/*
