@@ -61,4 +61,10 @@ exports.mapper =
 			, pageMethod: 'POST'
 			, map: 'ServiceDetails'
 		}
+		, 'RegisterUser' : {
+			pageId : "RegisterUser"
+			, pageModel : "CDR"
+			, pageMethod : "POST"
+			, map: "RegisterUser"
+		}
 	}

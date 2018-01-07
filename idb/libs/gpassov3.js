@@ -87,7 +87,7 @@ module.exports.mongoose=mongoose;
  var GPASSO_ROLE003MT  = new Schema({
   mkrId: { type: Number, unique: false, required: false, default: ''  } 
 , dtCreated: { type: Date, unique: false, required: false, default: ''  } 
-, athId: { type: Number, unique: false, required: false, default: ''  } 
+, athId: { type: Number, unique: false, required: false, default: ''   } 
 , dtModified: { type: Date, unique: false, required: false, default: ''  } 
 , roleName: { type: String, unique: false, required: false, default: ''  } 
 , status: { type: String, unique: false, required: false, default: ''  } 
