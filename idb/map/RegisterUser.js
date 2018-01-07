@@ -16,11 +16,14 @@ exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
 		prodVersion: '1',
 		prodName: 'GLOBAL_PROD_ADMIN'
 	}, function (err, prod) {
-
+// raise prod is not found
 		GPASSO_PRTL002MT_Model.findOne({
 			prtlVersion: '001',
 			prtlName: 'Member Portal'
 		}, function (err, prtl) {
+
+			//raise portal is not found
+
 			//dob can be added
 			var ssid = new GPASSO_SSID003MT_Model({
 				userRole: 'Internal',
@@ -43,18 +46,20 @@ exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
 				roleName: 'SEC_ADMIN'
 			}, function (err, role) {
 
+				// role is invalid
+
 				GPASSO_SSID003MT_Model.find({
 					lastName: ssid.lastName,
 					firstName: ssid.firstName,
 					emailId: ssid.emailId
 				}, function (err, dupSid) {
-
+					//handle database 
 					if (err) {
 
 					}
 
 					if (dupSid.length != 0) {
-						callback && callback(new Error("Duplcate Check"), {
+						return callback && callback(new Error("Duplcate Check"), {
 							"status": "Already exists"
 						});
 					}
@@ -62,7 +67,7 @@ exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
 
 					ssid.save(function (err) {
 						if (err) {
-							callback && callback(err, {
+							return callback && callback(err, {
 								"status": "Unable to save ssid : [" + ssid + "]"
 							});
 						}
@@ -81,7 +86,7 @@ exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
 							}
 						}, function (err) {
 							if (err) {
-								callback && callback(err, {
+								return callback && callback(err, {
 									"status": "Unable to save role : [" + role + "]"
 								});
 							}
@@ -96,12 +101,12 @@ exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
 								}
 							}, function (err) {
 								if (err) {
-									callback && callback(err, {
+									return callback && callback(err, {
 										"status": "Unable to save role : [" + role + "]"
 									});
 								}
 								console.log("prod saved");
-								callback && callback(new Error("Schema"), {
+								return callback && callback(new Error("Schema"), {
 									"status": "Saved"
 								})
 
@@ -111,30 +116,6 @@ exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
 						});
 
 					});
-					/*
-				role.save(function (err) {
-					if (err) {
-						callback && callback(err, {
-							"status": "Unable to save role : [" + role + "]"
-						});
-					}
-					console.log("role saved");
-					prod.save(function (err) {
-			
-						if (err) {
-							callback && callback(err, {
-								"status": "Unable to save prod : [" + prod + "]"
-							});
-						}
-						console.log("prod saved");
-				
-						callback && callback(null, {
-							"status": "Success"
-						});
-					});
-						
-				});
-				*/
 
 				});
 
