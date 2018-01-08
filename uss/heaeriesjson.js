@@ -174,8 +174,8 @@ valWithSch = function (recSch, rec) {
 	}
 	
 
-	if (((rec == undefined) || (rec.length == 0) ||  (rec.length  == undefined)) &&  ( recSch[0] != undefined)  && (recSch[0].mndf =="Y")) {
-		return new Error("Expected object  for  dataType  " + recSch[0].dataType + "of  " + recSch[0].name +"  but found is " +  JSON.stringify(rec));
+	if (((rec == undefined) || (Array.isArray(rec) && (rec.length == 0)) ||  (rec.length  == undefined)) &&  ( recSch[0] != undefined)  && (recSch[0].mndf =="Y")) {
+		return new Error("Expected object  for  dataType  " + recSch[0].dataType + " of  " + recSch[0].name +"  but found is [" +  JSON.stringify(rec) + "]");
 	}
 	
 	for (var r=0; r<rec.length; r++) {

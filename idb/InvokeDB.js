@@ -10,7 +10,9 @@ var  InvokeDB = function(pageId, pageType, SchemaJson, DataJson, respSchemaJson,
 		throw calback(err);
 	}
 	log.info("InvokeDB:IDB.002 mapper pageId:" + pageId); 	
-	log.info("InvokeDB:IDB.002 mapper pageType:" + pageType); 	
+	log.info("InvokeDB:IDB.002 mapper pageType:" + pageType); 
+	var path= './map/' + mapper[pageId].map;
+	log.info("path=" + path);
 	require('./map/' + mapper[pageId].map)[pageType](SchemaJson, DataJson, respSchemaJson, calback);		
 	log.info("InvokeDB:IDB.003 after");
 }

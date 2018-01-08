@@ -11,7 +11,7 @@ var GPASSO_PAGE005MT_Model = require('../libs/gpassov3').GPASSO_PAGE005MT_Model;
 var ObjectId = mongoose.Types.ObjectId;
 
 exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
-
+	console.log(inJson);
 	GPASSO_PROD001MT_Model.findOne({
 		prodVersion: '1',
 		prodName: 'GLOBAL_PROD_ADMIN'
