@@ -64,9 +64,10 @@ saveToMail001mt = function(mail001mt, inRespSchema, outJson, callback)  {
 		if(err) {
 			log.error("unable to mail: ", err);
 			return	callback && callback(null, ErrorResponseSchema, [{"ErrorResponse":[{"status":[{"responseCode":"001","responseDesc": "unable to save on database"}]}]}]);
-		}
+        }
+        console.log(" Successfully saved");
 		return callback&&callback(  null, inRespSchema, outJson);
-		console.log(" Successfully saved");
+
 			
 	});
 

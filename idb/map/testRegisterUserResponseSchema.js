@@ -1,11 +1,12 @@
 var idb = require("../InvokeDB");
 var log = require('../libs/log')(module);
+var heaeriesjson = require("../../uss/heaeriesjson");
 var pageId = "RegisterUser";
 //var pageType='getServiceDetails';
 var pageType = 'saveRegisterUser';
 var SchemaJson = [{ "group": "USS", "name": "ServiceDetails", "label": "Basic Details", "task": "ES", "desc": "", "htmlType": "PAGE", "entitle": "NONREADONLY", "enttlname": "", "mndf": "N", "dataType": "PAGE", "cclass": "ctable", "parent": "", "parentHtmlType": "", "validate": "", "dflt": "", "min": "0", "max": "60", "tips": "", "onkeyup": "onKeyUp(this);", "onchange": "onChange(this);", "onkeydown": "onKeyDown(this);", "onkeypress": "onKeyPress(this);", "onclick": "onClick(this);", "onblure": "onBlure(this);", "listVal": "0", "help": "N", "helpLink": "helpload", "xml": "Y", "xmlname": "", "Xpath": "/", "maxCol": "1", "col": "0", "childs": [{ "group": "USS", "name": "services", "label": "Services", "task": "NONE", "desc": "", "htmlType": "CONTAINER", "entitle": "READONLY", "enttlname": "", "mndf": "N", "dataType": "CONTAINER", "cclass": "ctable", "parent": "", "parentHtmlType": "", "validate": "", "dflt": "", "min": "0", "max": "60", "tips": "", "onkeyup": "onKeyUp(this);", "onchange": "onChange(this);", "onkeydown": "onKeyDown(this);", "onkeypress": "onKeyPress(this);", "onclick": "onClick(this);", "onblure": "onBlure(this);", "listVal": "||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY", "help": "N", "helpLink": "helpload", "xml": "Y", "xmlname": "", "Xpath": "/", "maxCol": "unlimited", "col": "0", "childs": [{ "group": "USS", "name": "resSjson", "label": "Response schema json", "task": "NONE", "desc": "", "htmlType": "TEXT", "entitle": "READONLY", "enttlname": "", "mndf": "N", "dataType": "VARCHAR", "cclass": "ctable", "parent": "", "parentHtmlType": "", "validate": "", "dflt": "", "min": "0", "max": "unlimited", "tips": "", "onkeyup": "onKeyUp(this);", "onchange": "onChange(this);", "onkeydown": "onKeyDown(this);", "onkeypress": "onKeyPress(this);", "onclick": "onClick(this);", "onblure": "onBlure(this);", "listVal": "||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY", "help": "N", "helpLink": "helpload", "xml": "Y", "xmlname": "", "Xpath": "/", "maxCol": "1", "col": "0", "childs": [] }, { "group": "USS", "name": "reqSjson", "label": "Request schema json", "task": "NONE", "desc": "", "htmlType": "TEXT", "entitle": "READONLY", "enttlname": "", "mndf": "N", "dataType": "VARCHAR", "cclass": "ctable", "parent": "", "parentHtmlType": "", "validate": "", "dflt": "", "min": "0", "max": "unlimited", "tips": "", "onkeyup": "onKeyUp(this);", "onchange": "onChange(this);", "onkeydown": "onKeyDown(this);", "onkeypress": "onKeyPress(this);", "onclick": "onClick(this);", "onblure": "onBlure(this);", "listVal": "||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY", "help": "N", "helpLink": "helpload", "xml": "Y", "xmlname": "", "Xpath": "/", "maxCol": "1", "col": "0", "childs": [] }, { "group": "USS", "name": "authReqd", "label": "Request Schema Json", "task": "NONE", "desc": "", "htmlType": "TEXT", "entitle": "READONLY", "enttlname": "", "mndf": "N", "dataType": "VARCHAR", "cclass": "ctable", "parent": "", "parentHtmlType": "", "validate": "", "dflt": "", "min": "0", "max": "60", "tips": "", "onkeyup": "onKeyUp(this);", "onchange": "onChange(this);", "onkeydown": "onKeyDown(this);", "onkeypress": "onKeyPress(this);", "onclick": "onClick(this);", "onblure": "onBlure(this);", "listVal": "||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY", "help": "N", "helpLink": "helpload", "xml": "Y", "xmlname": "", "Xpath": "/", "maxCol": "1", "col": "0", "childs": [] }, { "group": "USS", "name": "task", "label": "Task", "task": "NONE", "desc": "", "htmlType": "TEXT", "entitle": "READONLY", "enttlname": "", "mndf": "N", "dataType": "VARCHAR", "cclass": "ctable", "parent": "", "parentHtmlType": "", "validate": "", "dflt": "", "min": "0", "max": "60", "tips": "", "onkeyup": "onKeyUp(this);", "onchange": "onChange(this);", "onkeydown": "onKeyDown(this);", "onkeypress": "onKeyPress(this);", "onclick": "onClick(this);", "onblure": "onBlure(this);", "listVal": "||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY", "help": "N", "helpLink": "helpload", "xml": "Y", "xmlname": "", "Xpath": "/", "maxCol": "1", "col": "0", "childs": [] }, { "group": "USS", "name": "method", "label": "Task", "task": "NONE", "desc": "", "htmlType": "TEXT", "entitle": "READONLY", "enttlname": "", "mndf": "Y", "dataType": "VARCHAR", "cclass": "ctable", "parent": "", "parentHtmlType": "", "validate": "", "dflt": "", "min": "0", "max": "60", "tips": "", "onkeyup": "onKeyUp(this);", "onchange": "onChange(this);", "onkeydown": "onKeyDown(this);", "onkeypress": "onKeyPress(this);", "onclick": "onClick(this);", "onblure": "onBlure(this);", "listVal": "||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY", "help": "N", "helpLink": "helpload", "xml": "Y", "xmlname": "", "Xpath": "/", "maxCol": "1", "col": "0", "childs": [] }] }, { "group": "USS", "name": "serviceName", "label": "", "task": "NONE", "desc": "", "htmlType": "VARCHAR", "entitle": "READONLY", "enttlname": "", "mndf": "N", "dataType": "VARCHAR", "cclass": "ctable", "parent": "", "parentHtmlType": "", "validate": "", "dflt": "", "min": "0", "max": "60", "tips": "", "onkeyup": "onKeyUp(this);", "onchange": "onChange(this);", "onkeydown": "onKeyDown(this);", "onkeypress": "onKeyPress(this);", "onclick": "onClick(this);", "onblure": "onBlure(this);", "listVal": "||A|A-ADD|M|M-MODIFY|I|I-INQURY|C|C-CANCEL|V|V-VERIFY", "help": "N", "helpLink": "helpload", "xml": "Y", "xmlname": "", "Xpath": "/", "maxCol": "1", "col": "0", "childs": [] }] }];
 //var DataJson=[{"ServiceDetails":[{"services":[{"resSjson":"Response schema json","reqSjson":"","authReqd":"", "task" : "getUserDetails"}],"ServiceName":""}]}]
-var resSchema = require("../../jsonSchema/registerUserRequestSchema.json");
+var resSchema = require("../../jsonSchema/registerUserResponseSchema.json");
 ///Users/durai/Desktop/node/clientsp/jsonSchema/registerUserRequestSchema.json
 var reqSchema = require("../../jsonSchema/registerUserRequestSchema.json");
 var DataJson = [
@@ -14,24 +15,22 @@ var DataJson = [
             {
                 "userDetails": [
                     {
-                        "userRole": "Internal",
-                        "userType": "Member",
-                        "empId": "H000004",
-                        "emailId": "gopal.govindaraj",
-                        "username": "gopal.govindaraj",
+                        "userRole": "INTERNAL",
+                        "userType": "MEMBER",
+                        "empId": "H000005",
+                        "emailId": "picha.murugan",
+                        "username": "picha.murugan",
                         "middleName": "",
-                        "lastName": "Gopal",
-                        "firstName": "Govindaraj"
+                        "lastName": "test12",
+                        "firstName": "murugan"
                     }
                 ]
-            },
-            {
-                "prodDetails": [
+                , "prodDetails": [
                     {
                         "prodName": "GLOBAL_PROD_ADMIN",
                         "prodVersion": "1",
                         "prtlName": "Member Portal",
-                        "prtlVersion": "1",
+                        "prtlVersion": "001",
                         "roleName": "SEC_ADMIN"
                     }
                 ]
@@ -42,7 +41,7 @@ var DataJson = [
 
 try {
     log.info("call InvokeDB:001");
-    idb.InvokeDB(pageId, pageType, reqSchema, DataJson, SchemaJson, function (err, respSchemaJson, respDataJson) {
+    idb.InvokeDB(pageId, pageType, reqSchema, DataJson, resSchema, function (err, respSchemaJson, respDataJson) {
         log.info("InvokeDB:I.001");
         if (err) {
             console.log("ERROR:calling InvokeDB:002", err);

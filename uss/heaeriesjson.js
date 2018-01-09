@@ -308,7 +308,7 @@ re = RegExp("^[0-9.]{"+ recSch[s].min + "," + recSch[s].max + "}$");
 			var inpStrArr= recSch[s].listVal.split('|');
 			var chk=0;
 			var values = new Array();
-			inpStrArr.forEach(function(obj, index) { if (index%2 == 1) { values.push(obj)} });
+			inpStrArr.forEach(function(obj, index) { if (index%2 == 0) { values.push(obj)} });
 			if (!values.some(function(elem) {  return elem == value; }))	 {
 				return new Error(recSch[s].name + " has invalid " + recSch[s].dataType + " value : [" + value + "] expected: " + JSON.stringify(values));
 			}
