@@ -1,6 +1,8 @@
 var mapper= require('./mapper').mapper;
 var log = require('../libs/log')(module);
 var heaeriesjson = require("../uss/heaeriesjson");
+var InternalServerError = require("../libs/error/InternalServer");
+
 var sjson = []; 
 var  json = [];
 var  InvokeDB = function(pageId, pageType, SchemaJson, DataJson, respSchemaJson, calback) {
@@ -13,7 +15,13 @@ var  InvokeDB = function(pageId, pageType, SchemaJson, DataJson, respSchemaJson,
 	log.info("InvokeDB:IDB.002 mapper pageType:" + pageType); 
 	var path= './map/' + mapper[pageId].map;
 	log.info("path=" + path);
-	require('./map/' + mapper[pageId].map)[pageType](SchemaJson, DataJson, respSchemaJson, calback);		
+	log.info("pageType=" + pageType);
+	var map=require('./map/' + mapper[pageId].map);
+	if (map && map[pageType]) {
+		map[pageType](SchemaJson, DataJson, respSchemaJson, calback);
+	} else {
+		throw calback(new InternalServerError("Internal Server Error"));
+	}
 	log.info("InvokeDB:IDB.003 after");
 }
 /*
