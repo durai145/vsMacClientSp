@@ -9,7 +9,8 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/idb/map/testRegisterUserResponseSchema.js"
+            "program": "${workspaceFolder}/app.js"
+            //"program": "${workspaceFolder}/idb/map/testRegisterUserResponseSchema.js"
         },
         
     ]

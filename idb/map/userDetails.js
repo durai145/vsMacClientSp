@@ -17,10 +17,20 @@ exports.isValidUser=function(inSchema, inJson, inRespSchema, callback) {
 	//console.log(inJson);
 	//doLogin1(inJson[0].LoginDetails[0], function(err) {
 //[{"isValidUserRequest":[{"userDetails":[{"emailId":"email Id"}],"portalDetails":[{"portalKey":"Portal Key"}]}]}]
-	var outJson =  [{"isValidUserResponse":[{"userDetails":[{"firstName":"first Name","lastName":"Last Name","userRole":"User Role"}]}]}];
+	var outJson = {
+		"isValidUserResponse":
+			{
+				"userDetails":
+					{
+						"firstName": "first Name",
+						"lastName": "Last Name",
+						"userRole": "User Role"
+					}
+			}
+	};
 
-var userDetails = inJson[0].isValidUserRequest[0].userDetails[0];
-var portalDeatils = inJson[0].isValidUserRequest[0].portalDetails[0];
+var userDetails = inJson.isValidUserRequest.userDetails;
+var portalDeatils = inJson.isValidUserRequest.portalDetails;
 
 log.info("calling GPASSO_SSID003MT_Model");
 GPASSO_SSID003MT_Model.findOne({$or : [{"emailId": userDetails.emailId}, {"empId": userDetails.emailId}]},function (err, ssid) {
@@ -98,9 +108,9 @@ GPASSO_SSID003MT_Model.findOne({$or : [{"emailId": userDetails.emailId}, {"empId
 											
 										}); 
 									
-										 outJson[0].isValidUserResponse[0].userDetails[0].lastName = ssid.lastName;
-										 outJson[0].isValidUserResponse[0].userDetails[0].firstName = ssid.firstName;
-										 outJson[0].isValidUserResponse[0].userDetails[0].userRole = ssid.userRole;
+										 outJson.isValidUserResponse.userDetails.lastName = ssid.lastName;
+										 outJson.isValidUserResponse.userDetails.firstName = ssid.firstName;
+										 outJson.isValidUserResponse.userDetails.userRole = ssid.userRole;
 										 //outJson[0].isValidUserResponse[0].userDetails[0].grpName = role.roleName;
 										 //outJson[0].isValidUserResponse[0].userDetails[0].prtlName = prod.prodName + " " + prtl[0].prtlName;
 										// outJson[0].isValidUserResponse[0].userDetails[0].prodVersion = prod.prodVersion + " " + prtl[0].prtlVersion;
