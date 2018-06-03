@@ -22,10 +22,6 @@ define([
     ]);
 
     webApp.config('$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
-        // body...
-
-        //$httpProvider.defaults.headers.post['XSRF-AUTH'] = "some accessToken to be generated later"; 
-
         console.log('httpProvider');
         console.log($httpProvider);
         $httpProvider.defaults.headers.post['x-access-token'] = "access token";

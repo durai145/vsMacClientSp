@@ -1,0 +1,34 @@
+{
+    "base": "http://localhost:5001/schema/uss/",
+    "default": {},
+    "$id": "http://heaerieglobalsolutions.com/schema/uss/field.json",
+    "properites": {},
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "required":[
+        "name",
+        "dataType",
+        "group",
+        "htmlType",
+        "entitle",
+        "editorRole"
+    ],
+    "definitions": {
+        "dataType": {
+            "enum": [
+                "VARCHAR",
+                "DATE",
+                "",
+                "boolean",
+                "integer",
+                "null",
+                "number",
+                "object",
+                "string"
+            ]
+        }
+    },
+    "properties": {
+
+    }
+
+}

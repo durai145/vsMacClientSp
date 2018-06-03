@@ -13,21 +13,14 @@ var ObjectId = mongoose.Types.ObjectId;
 
 var InternalServer = require("../../libs/error/InternalServer");
 exports.isValidUser=function(inSchema, inJson, inRespSchema, callback) {
-	//console.log("in loginDetails.doLogin");
-	//console.log(inJson);
-	//doLogin1(inJson[0].LoginDetails[0], function(err) {
-//[{"isValidUserRequest":[{"userDetails":[{"emailId":"email Id"}],"portalDetails":[{"portalKey":"Portal Key"}]}]}]
-	var outJson = {
-		"isValidUserResponse":
-			{
-				"userDetails":
-					{
-						"firstName": "first Name",
-						"lastName": "Last Name",
-						"userRole": "User Role"
-					}
-			}
-	};
+	var outJson =  {"isValidUserResponse":
+						{"userDetails":
+									{"firstName":"first Name",
+									"lastName":"Last Name",
+									"userRole":"User Role"}
+								}
+							}
+							;
 
 var userDetails = inJson.isValidUserRequest.userDetails;
 var portalDeatils = inJson.isValidUserRequest.portalDetails;

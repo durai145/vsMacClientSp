@@ -1,0 +1,22 @@
+                                "help": "N",
+                                "helpLink": "helpload",
+                                "xml": "Y",
+                                "xmlname": "",
+                                "Xpath": "/",
+                                "maxCol": "1",
+                                "col": "0",
+                                "dimensions": "",
+                                "dimensionMax": "",
+                                "dimensionMin": "",
+                                "dataCategory": "PRIMITIVE",
+                                "iconListVal": "undefined",
+                                "camelCase": true,
+                                "childs": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

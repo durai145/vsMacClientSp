@@ -1,15 +1,10 @@
-define([],function(){
+define([], function () {
+    return ['$resource', function ($resource) {
+        return $resource('/service/:module/:task', null,{
+                isValidUser: { method: 'POST', params: { "module": "userDetails", "task": "isValidUser" } }
+            });
 
-return ['$resource',function  ($resource) {
-	// body...
-	return $resource('/gpasso/:action', null,
-    {
-         authorize    : { method:'POST', params:{"action" : "auth"}      }
-        ,authorizeSSO : { method:'POST', params:{"action" : "authorize"} }
-        ,tokenSSO     : { method:'POST', params:{"action" : "tokenSSO"}     }
-    });
-	
-}
-];
+    }
+    ];
 
 });
