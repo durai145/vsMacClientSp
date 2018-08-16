@@ -17,6 +17,8 @@ var fs = require('fs');
 var idb = require('./idb/InvokeDB');
 var uss = require('./idb/USS_10');
 var log = require('./libs/log')(module);
+var mongoose = require("./idb/libs/mongodb");
+// Application should stop if database connection is down
 
 var AuthorizationFailure = require("./libs/error/AuthorizationFailure");
 var TaskNotFound = require("./libs/error/TaskNotFound");
@@ -1017,7 +1019,7 @@ serviceHandler = function (req, res) {
 
 						err = heaeriesjson.valWithSch(apiSchemaJson, apiDataJson);
 						if (err) {
-							log.error("Internal Server Errot", err);
+							log.error("Internal Server Error", err);
 							res.statusCode = 500;
 							return res.send({ errorDesc: err.message });
 						}

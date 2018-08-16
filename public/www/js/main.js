@@ -19,14 +19,21 @@ require.config({
         , 'services'          : './lib/angular/services/'
         , 'directives'        : './lib/angular/directives/'
         , 'filters'           : './lib/angular/filters/'
-		    , 'jquery'            : './lib/jquery'
+		, 'jquery'            : './lib/jquery'
         , 'app'               : './lib/angular/app'
         , 'ngResource'        : './lib/external/angular-resource/angular-resource'
         , 'angularSanitize'   : './lib/external/angular-resource/angular-sanitize'
         , 'jqueryFlot'        : './lib/external/jquery/jquery-flot'
         , 'excanvas'          : './lib/external/jquery/excanvas'
         , 'jqueryFlotPie'     : './lib/external/jquery/jquery-flot-pie'
-        , 'toaster'           :'./lib/external/angularjs-toaster/toaster'
+        , 'toaster'           : './lib/external/angularjs-toaster/toaster'
+        , 'framegeneratorV1'  : './lib/external/framegeneratorV1/index'
+        , 'mapper'            : './lib/external/framegeneratorV1/mapper/index'
+        , 'HtmlSelect'        : './lib/external/framegeneratorV1/mapper/map/HtmlSelect'
+        , 'HtmlLabel'        : './lib/external/framegeneratorV1/mapper/map/HtmlLabel'
+        , 'HtmlText'        : './lib/external/framegeneratorV1/mapper/map/HtmlText'
+        , 'frame'        : './lib/external/framegeneratorV1/uss/frame'
+        , 'field'        : './lib/external/framegeneratorV1/uss/field'
         , 'ufi.xml'           :'./lib/ufi.xml'
         , 'ufi.core'           :'./lib/ufi.core'
         , 'ufi.frameGen'           :'./lib/ufi.frameGen'
@@ -47,6 +54,7 @@ require.config({
           'bootstrap'     :['jquery'        ]
         , 'angular'       : { 'exports':'angular'}
        // , 'angularRoute'  : { exports:'angularRoute'}
+        , "framegeneratorV1" : ["jquery"]
         , 'app'           :['angular'        ]
         , 'app'           :['jquery'         ]
         , 'jqueryFlot'    :['jquery'         ]
@@ -76,7 +84,7 @@ require.config({
         , "ufi.xml"         : ["ufi.core"]
         , "ufi.validate"    : ["ufi.core"]
         , "ufi.frameGen"    : { exports:'ufiFrameGen'}
-        , 'app'            :{ 'deps':['angular','jquery','angularRoute','ngResource','angularUiRouter','angularAnimate','excanvas','jqueryFlot','jqueryFlotPie','toaster','ufi','ufi.frameGen','ufi.validate', 'ufi.xml']}
+        , 'app'            :{ 'deps':['angular','jquery','angularRoute','ngResource','angularUiRouter','angularAnimate','excanvas','jqueryFlot','jqueryFlotPie','toaster','ufi','ufi.frameGen','ufi.validate', 'ufi.xml', 'framegeneratorV1']}
         
     }
     /*

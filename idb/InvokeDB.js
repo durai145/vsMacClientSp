@@ -1,22 +1,22 @@
-var mapper= require('./mapper').mapper;
+var mapper = require('./mapper').mapper;
 var log = require('../libs/log')(module);
 var heaeriesjson = require("../uss/heaeriesjson");
 var InternalServerError = require("../libs/error/InternalServer");
 
-var sjson = []; 
-var  json = [];
-var  InvokeDB = function(pageId, pageType, SchemaJson, DataJson, respSchemaJson, calback) {
+var sjson = [];
+var json = [];
+var InvokeDB = function (pageId, pageType, SchemaJson, DataJson, respSchemaJson, calback) {
 	log.info("InvokeDB:IDB.001 valWithSch");
 	var err = heaeriesjson.valWithSch(SchemaJson, DataJson);
 	if (err) {
 		throw calback(err);
 	}
-	log.info("InvokeDB:IDB.002 mapper pageId:" + pageId); 	
-	log.info("InvokeDB:IDB.002 mapper pageType:" + pageType); 
-	var path= './map/' + mapper[pageId].map;
+	log.info("InvokeDB:IDB.002 mapper pageId:" + pageId);
+	log.info("InvokeDB:IDB.002 mapper pageType:" + pageType);
+	var path = './map/' + mapper[pageId].map;
 	log.info("path=" + path);
 	log.info("pageType=" + pageType);
-	var map=require('./map/' + mapper[pageId].map);
+	var map = require('./map/' + mapper[pageId].map);
 	if (map && map[pageType]) {
 		map[pageType](SchemaJson, DataJson, respSchemaJson, calback);
 	} else {
@@ -59,4 +59,4 @@ try {
 }
 console.log("calling InvokeDB:003");
 */
-exports.InvokeDB=InvokeDB;
+exports.InvokeDB = InvokeDB;

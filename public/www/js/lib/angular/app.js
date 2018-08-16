@@ -42,6 +42,46 @@ define([
 
 
 
+    var webApp= angular.module('app', [
+      'controllers'
+     ,'ngRoute'
+     ,'toaster' 
+     ,'services'
+     ,'ui.router'
+     ,'ngAnimate'
+     //,'ussService'
+     //,'$http'
+   //  , 'require'
+     //,'ufi'
+     //,''
+     /*,'app.directives'
+     ,'app.filters'
+     ,'app.services'
+     */
+ ]);
+
+
+/*
+ webApp.provider('unicornLauncher', function UnicornLauncherProvider() {
+   var useTinfoilShielding = false;
+ 
+   this.useTinfoilShielding = function(value) {
+     useTinfoilShielding = !!value;
+   };
+ 
+   this.$get = ["apiToken", function unicornLauncherFactory(apiToken) {
+ 
+     // let's assume that the UnicornLauncher constructor was also changed to
+     // accept and use the useTinfoilShielding argument
+     return new UnicornLauncher(apiToken, useTinfoilShielding);
+   }];
+ });
+ 
+
+ webApp.config(["unicornLauncherProvider", function(unicornLauncherProvider) {
+   unicornLauncherProvider.useTinfoilShielding(true);
+ }]);
+*/
  
 
     webApp.provider('heaerieUssService', function heaerieUssServiceProvider() {
@@ -743,6 +783,8 @@ var tempJson= eval(tempJsonstr);
   
   var USS=require("ufi.core").USS;
   var ufiframegen=require("ufi.frameGen");
+  var framegeneratorV1 = require("framegeneratorV1");
+      console.log("framegeneratorV1=" + framegeneratorV1);    
   var ufivalidate=require("ufi.validate");
   var $=require("jquery");
   var us= new ufiframegen.FG();

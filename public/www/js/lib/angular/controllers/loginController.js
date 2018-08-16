@@ -7,6 +7,7 @@ define([],
         alert("login control");
       }
       $scope.uss_submit = function () {
+     
         loginService.isValidUser({
           "grantType": "password"
           , 'clientId': 'CLIENTSP'
@@ -26,7 +27,7 @@ define([],
           }
 
         }, function (resp) {
-        
+          toaster.pop('success', 'this', JSON.stringify(resp));
           var states = $state.get();
           var itemsToBeRemoved = [];
           var removalIndex = 0;
