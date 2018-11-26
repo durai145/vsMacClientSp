@@ -34,7 +34,7 @@ GPASSO_SSID003MT_Model.findOne({$or : [{"emailId": userDetails.emailId}, {"empId
 				} else {
 					if (ssid == null) {
 					//	return callback&&callback(null, ErrorResponseSchema, [{"ErrorResponse":[{"status":[{"responseCode":"002","responseDesc":"Username / password is wrong"}]}]}] );
-						return callback&&callback(new AuthorizationFailure("Username/EmailId is wrong[userDetails.emailId=" + userDetails.emailId +"]" ));
+						return callback&&callback(new AuthorizationFailure("Username/EmailId is wrong[userDetails.emailId= " + userDetails.emailId + "]" ));
 					}
 					 
 					

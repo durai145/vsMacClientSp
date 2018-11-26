@@ -147,6 +147,7 @@ GPASSO_PROD001MT_Model.remove({}, function(err) {
 			prod.save(function (err) {
 
 				if(err) {	
+					console.log(err, pord);
 					callback && callback(err,{"status" : "Unable to save prod : [" + prod + "]"});
 				}
 				console.log("prod saved");
@@ -168,12 +169,13 @@ GPASSO_PROD001MT_Model.remove({}, function(err) {
 doLogin=function(loginDetails, callback) {
 
 		loginDetails= loginDetails|| {};
-
+		log.info("LG:001: ### loginDetails" , loginDetails);
 			if (loginDetails.username != undefined ||  loginDetails.password  != undefined ||   loginDetails.prtlKey != undefined) {
 				return callback&&callback(new Error("Invalid parameter") , {});
 			} else {
-		
+				log.info("LG:002: ### GPASSO_SSID003MT_Model" , loginDetails);
 				GPASSO_SSID003MT_Model.findOne({"username": "H1450001"},function (err, ssid) {
+				
 					if(err) {
 						return callback&&callback(new Error("Internal Server Error"));
 					} else if (ssid == null){

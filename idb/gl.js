@@ -1,15 +1,15 @@
 var log                 = require('./libs/log')(module);
-var mongoose            = require('./libs/mongoose').mongoose;
-var UserModel           = require('./libs/mongoose').UserModel;
-var ClientModel         = require('./libs/mongoose').ClientModel;
+//var mongoose            = require('./libs/mongoose').mongoose;
+//var UserModel           = require('./libs/mongoose').UserModel;
+//var ClientModel         = require('./libs/mongoose').ClientModel;
 var GPASSO_GTRN002MB_Model     = require('./libs/gpassov3').GPASSO_GTRN002MB_Model;
 var GPASSO_SID001MB_Model     = require('./libs/gpassov3').GPASSO_SID001MB_Model;
 var GPASSO_GRP001MB_Model     = require('./libs/gpassov3').GPASSO_GRP001MB_Model;
 var GPASSO_PGGR005MB_Model     = require('./libs/gpassov3').GPASSO_PGGR005MB_Model;
 var GPASSO_PROD001MB_Model   = require('./libs/gpassov3').GPASSO_PROD001MB_Model;
 var GPASSO_PRTL002MB_Model   = require('./libs/gpassov3').GPASSO_PRTL002MB_Model; 
-var AccessTokenModel    = require('./libs/mongoose').AccessTokenModel;
-var RefreshTokenModel   = require('./libs/mongoose').RefreshTokenModel;
+//var AccessTokenModel    = require('./libs/mongoose').AccessTokenModel;
+//var RefreshTokenModel   = require('./libs/mongoose').RefreshTokenModel;
 var faker               = require('Faker');
 
 
