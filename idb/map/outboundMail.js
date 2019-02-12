@@ -16,20 +16,15 @@ exports.outboundMail=function(inSchema, inJson, inRespSchema, callback) {
 	//console.log("in loginDetails.doLogin");
 	//console.log(inJson);
 	//doLogin1(inJson[0].LoginDetails[0], function(err) {
-var outJson =  [
-    {
-        "outboundMailResponse": [
-            {
-                "statusDetails": [
-                    {
-                        "statusCode": "000",
-                        "statusDescr": "Mail is Saved in HSMAIL"
-                    }
-                ]
-            }
-        ]
-    }
-] ;
+var outJson =  { 
+			"outboundMailResponse": {
+				"statusDetails": {
+					"statusCode": "000",
+					"statusDescr": "Mail is Saved in HSMAIL"
+                    		}
+		 	}
+        
+    		};
 
 
   var timeSlot  =  new Date();
@@ -38,14 +33,14 @@ var mail001mt= new GPASSO_MAIL001MT_Model(
 {
   attachments: [],
   body: [],
-  uuid : inJson[0].outboundMailRequest[0].uuid,
-  mailFrom : inJson[0].outboundMailRequest[0].mailFrom,
-  to : inJson[0].outboundMailRequest[0].to,
-  header_list: inJson[0].outboundMailRequest[0].header_list,
-  headers_decoded: inJson[0].outboundMailRequest[0].headers_decoded,
-  headers: inJson[0].outboundMailRequest[0].headers,
-  body: inJson[0].outboundMailRequest[0].body,
-  attachments: inJson[0].outboundMailRequest[0].attachments,
+  uuid : inJson.outboundMailRequest.uuid,
+  mailFrom : inJson.outboundMailRequest.mailFrom,
+  to : inJson.outboundMailRequest.to,
+  header_list: inJson.outboundMailRequest.header_list,
+  headers_decoded: inJson.outboundMailRequest.headers_decoded,
+  headers: inJson.outboundMailRequest.headers,
+  body: inJson.outboundMailRequest.body,
+  attachments: inJson.outboundMailRequest.attachments,
   dtModified: new Date(),
   athId: 1,
   dtCreated: new Date(),
@@ -63,7 +58,7 @@ saveToMail001mt = function(mail001mt, inRespSchema, outJson, callback)  {
 	mail001mt.save(function(err) {
 		if(err) {
 			log.error("unable to mail: ", err);
-			return	callback && callback(null, ErrorResponseSchema, [{"ErrorResponse":[{"status":[{"responseCode":"001","responseDesc": "unable to save on database"}]}]}]);
+			return	callback && callback(null, ErrorResponseSchema, {"ErrorResponse":{"status":{"responseCode":"001","responseDesc": "unable to save on database"}}});
         }
         console.log(" Successfully saved");
 		return callback&&callback(  null, inRespSchema, outJson);

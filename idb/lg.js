@@ -216,6 +216,7 @@ doLogin( input, function(err,msg) {
 
 	} else {
 		console.log(JSON.stringify(msg));
+		console.log('Success');
 	}
 });
 
