@@ -10,22 +10,22 @@ parseBody = function (body, isHtml) {
 			header.body = header.body || [];
 			header.body.push(parseContext(bodyObj.childern, isHtml));
 		} else if (bodyObj.state == "body") {
-			header = bodyObj.header.headers_decoded;
 			header.body = header.body || [];
 			header.body.push(parseContext(bodyObj.childern, isHtml));
 		} 
+
+
 	});
 	return header;	
 };
 
 parseContext = function(body, isHtml) {
 	var bodyList = new Array();
-	if (typeof body == "Array") {
+	if (typeof body == "Array") { 
 	body.forEach(function (bodyObj) {
-//		console.log(bodyObj);
-//		if (bodyObj.state == "end") {
-//			throw new Error("end state found on child");
-//		} 
+		if (bodyObj.state == "end") {
+			throw new Error("end state found on child");
+		} 
 	
 		if (bodyObj.is_htmal == isHtml) {
 			try  {
@@ -41,7 +41,8 @@ parseContext = function(body, isHtml) {
 		}
 	});
 	} else {
-		console.log("body type is not array [" + typeof body + "]");
+		console.log("RequestType is not Array[" + typeof body + "]");
+		console.log(body);
 	}
 	return bodyList;		
 }
