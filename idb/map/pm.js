@@ -16,6 +16,7 @@ var ErrorResponseSchema = require('../../jsonSchema/ErrorResponseSchema.json');
 
 var GPASSO_MAIL001MT_Model   = require('../libs/gpassov3').GPASSO_MAIL001MT_Model;
 var GPASSO_RSPT007PT_Model   = require('../libs/gpassov3').GPASSO_RSPT007PT_Model;
+var MAILCSP_MAIL001MT_Model   = require('../libs/mailcsp').MAILCSP_MAIL001MT_Model;
 
 var parseBody = require("./parseBody2");
 var quotedPrintable = require('quoted-printable');
@@ -92,7 +93,7 @@ GPASSO_RSPT007PT_Model.findOne({"restartName" : "MAIL_PROCESS_RESTART"}, functio
 				hasAttachment : false
 				
 			};
-	
+			MAILCSP_MAIL001MT_Model.save(tableObj);	
 			console.log("parsedMail:");
 			console.log(JSON.stringify(tableObj, null, 4));
 			
