@@ -1,5 +1,5 @@
 FROM node:8.10.0
-MAINTAINER Jayagopal Govindaraj <jayagopal.govindaraj@heaerieglobalsolutions.com>
+# MAINTAINER Jayagopal Govindaraj <jayagopal.govindaraj@heaerieglobalsolutions.com>
 ADD . /app
 WORKDIR /app
 RUN mkdir /config/
