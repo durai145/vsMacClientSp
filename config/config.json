@@ -1,1 +1,6 @@
-../../config/config.json
+{
+        "port": 5000,
+        "mongoose": {
+                "uri": "mongodb://localhost:27017/gpasso"
+        }
+}
