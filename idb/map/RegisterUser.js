@@ -11,11 +11,10 @@ var GPASSO_PAGE005MT_Model = require('../libs/gpassov3').GPASSO_PAGE005MT_Model;
 var ObjectId = mongoose.Types.ObjectId;
 
 exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
-	console.log(inJson);
+	console.log(JSON.stringify(inJson, null, 4));
 
-	var outJson =  [
-		{
-			"registerUserResponse": [
+	var outJson = {
+			"registerUserResponse": 
 				{
 					"statusDetails": [
 						{
@@ -24,13 +23,11 @@ exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
 						}
 					]
 				}
-			]
-		}
-	] ;
+		};
 
 	var prodQuery = {
-		prodVersion: inJson[0].registerUserRequest[0].prodDetails[0].prodVersion,
-		prodName: inJson[0].registerUserRequest[0].prodDetails[0].prodName
+		prodVersion: inJson.registerUserRequest.prodDetails.prodVersion,
+		prodName: inJson.registerUserRequest.prodDetails.prodName
 	};
 	GPASSO_PROD001MT_Model.findOne(prodQuery, function (err, prod) {
 
@@ -44,8 +41,8 @@ exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
 		}
 
 		var prtlQuery = {
-			prtlVersion: inJson[0].registerUserRequest[0].prodDetails[0].prtlVersion,
-			prtlName: inJson[0].registerUserRequest[0].prodDetails[0].prtlName
+			prtlVersion: inJson.registerUserRequest.prodDetails.prtlVersion,
+			prtlName: inJson.registerUserRequest.prodDetails.prtlName
 		};
 		GPASSO_PRTL002MT_Model.findOne(prtlQuery, function (err, prtl) {
 
@@ -76,7 +73,7 @@ exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
 			//dob can be added
 			var roleQuery = {
 				status: 'ACTIVE',
-				roleName: inJson[0].registerUserRequest[0].prodDetails[0].roleName
+				roleName: inJson.registerUserRequest.prodDetails.roleName
 			};
 			GPASSO_ROLE003MT_Model.findOne(roleQuery, function (err, role) {
 				if (err) {
@@ -88,9 +85,9 @@ exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
 					return callback && callback(new Error("Invalid Role [" + JSON.stringify(roleQuery) + "]"), null);
 				}
 				var ssidDupQuery= {
-					lastName: inJson[0].registerUserRequest[0].userDetails[0].lastName,
-					firstName: inJson[0].registerUserRequest[0].userDetails[0].firstName,
-					emailId: inJson[0].registerUserRequest[0].userDetails[0].emailId
+					lastName: inJson.registerUserRequest.userDetails.lastName,
+					firstName: inJson.registerUserRequest.userDetails.firstName,
+					emailId: inJson.registerUserRequest.userDetails.emailId
 				};
 				GPASSO_SSID003MT_Model.find(ssidDupQuery, function (err, dupSid) {
 					//handle database 
@@ -106,15 +103,15 @@ exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
 						});
 					}
 					var ssid = new GPASSO_SSID003MT_Model({
-						userRole: inJson[0].registerUserRequest[0].userDetails[0].userRole,
-						userType: inJson[0].registerUserRequest[0].userDetails[0].userType,
-						empId: inJson[0].registerUserRequest[0].userDetails[0].empId,
-						emailId: inJson[0].registerUserRequest[0].userDetails[0].emailId,
+						userRole: inJson.registerUserRequest.userDetails.userRole,
+						userType: inJson.registerUserRequest.userDetails.userType,
+						empId: inJson.registerUserRequest.userDetails.empId,
+						emailId: inJson.registerUserRequest.userDetails.emailId,
 						password: '1qaz2wsx',
-						username: inJson[0].registerUserRequest[0].userDetails[0].username,
+						username: inJson.registerUserRequest.userDetails.username,
 						middleName: '',
-						lastName: inJson[0].registerUserRequest[0].userDetails[0].lastName,
-						firstName: inJson[0].registerUserRequest[0].userDetails[0].firstName,
+						lastName: inJson.registerUserRequest.userDetails.lastName,
+						firstName: inJson.registerUserRequest.userDetails.firstName,
 						dtModified: new Date(),
 						athId: 1,
 						dtCreated: new Date(),
@@ -133,7 +130,7 @@ exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
 						prod.usrIds.push(ssid);
 						GPASSO_ROLE003MT_Model.update({
 							"status": "ACTIVE",
-							"roleName": inJson[0].registerUserRequest[0].prodDetails[0].roleName
+							"roleName": inJson.registerUserRequest.prodDetails.roleName
 						}, {
 							$addToSet: {
 								"usrIds": ssid.id
@@ -148,7 +145,7 @@ exports.saveRegisterUser = function (inSchema, inJson, inRespSchema, callback) {
 
 							GPASSO_PROD001MT_Model.update({
 								prodVersion: '1',
-								prodName: inJson[0].registerUserRequest[0].prodDetails[0].prodName
+								prodName: inJson.registerUserRequest.prodDetails.prodName
 							}, {
 								$addToSet: {
 									"usrIds": ssid.id

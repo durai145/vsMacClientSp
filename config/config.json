@@ -1,6 +1,7 @@
 {
         "port": 5000,
         "mongoose": {
-                "uri": "mongodb://localhost:27017/gpasso"
+                "uri": "mongodb://mdbrp001:27017,mdbrp002:27017,mdbrp001:27017/gpasso?replicaSet=my-mongo-set"
         }
 }
+
