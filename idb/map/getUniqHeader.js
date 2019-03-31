@@ -20,6 +20,7 @@ parseBody = function (body, isHtml) {
 
 parseContext = function(body, isHtml) {
 	var bodyList = new Array();
+	if (typeof body == "Array") {
 	body.forEach(function (bodyObj) {
 //		console.log(bodyObj);
 //		if (bodyObj.state == "end") {
@@ -39,6 +40,9 @@ parseContext = function(body, isHtml) {
 			bodyList.push(parseContext(bodyObj.childern))
 		}
 	});
+	} else {
+		console.log("body type is not array [" + typeof body + "]");
+	}
 	return bodyList;		
 }
 

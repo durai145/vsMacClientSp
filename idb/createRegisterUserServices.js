@@ -293,30 +293,27 @@ var SchemaJson = [{
 //var DataJson=[{"ServiceDetails":[{"services":[{"resSjson":"Response schema json","reqSjson":"","authReqd":"", "task" : "getUserDetails"}],"ServiceName":""}]}]
 var resSchema = require("../jsonSchema/registerUserResponseSchema.json");
 var reqSchema = require("../jsonSchema/registerUserRequestSchema.json");
-var DataJson = [{
-    "registerUserRequest": [{
-            "userDetails": [{
+var DataJson = {
+    "registerUserRequest": {
+            "userDetails": {
                 "userRole": "INTERNAL",
                 "userType": "MEMBER",
-                "empId": "",
-                "emailId": "",
-                "username": "",
+                "empId": "H1450005",
+                "emailId": "H1450005",
+                "username": "H1450005",
                 "middleName": "",
-                "lastName": "",
-                "firstName": ""
-            }]
-        },
-        {
-            "prodDetails": [{
-                "prodName": "",
-                "prodVersion": "",
-                "prtlName": "",
-                "prtlVersion": "",
-                "roleName": ""
-            }]
+                "lastName": "Duraimurugan",
+                "firstName": "Abijith"
+            },
+            "prodDetails": {
+                "prodName": "GLOBAL_PROD_ADMIN",
+                "prodVersion": "1",
+                "prtlName": "Member Portal",
+                "prtlVersion": "001",
+                "roleName": "SEC_ADMIN"
+            }
         }
-    ]
-}];
+};
 
 try {
     log.info("call InvokeDB:001");

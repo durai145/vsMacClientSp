@@ -77,6 +77,21 @@ DataSetup = function (callback) {
 			dtCreated: new Date(),
 			mkrId: 1
 		});
+		var ssid4 = new GPASSO_SSID003MT_Model({
+			userRole: 'Internal',
+			userType: 'Member',
+			empId: 'contactus',
+			emailId: 'contactus',
+			password: '1qaz2wsx',
+			username: 'contactus',
+			middleName: '',
+			lastName: 'Contact',
+			firstName: 'Heaeire',
+			dtModified: new Date(),
+			athId: 1,
+			dtCreated: new Date(),
+			mkrId: 1
+		});
 		var role = new GPASSO_ROLE003MT_Model({
 			pageGrpIds: [],
 			roleValue: 0xff,
