@@ -2,11 +2,9 @@ define([],function(){
 
 return ['$resource',function  ($resource) {
 	// body...
-	return $resource('/gpasso/:action', null,
+	return $resource('/service/userDetails/:task', null,
     {
-         authorize    : { method:'POST', params:{"action" : "auth"}      }
-        ,authorizeSSO : { method:'POST', params:{"action" : "authorize"} }
-        ,tokenSSO     : { method:'POST', params:{"action" : "tokenSSO"}     }
+        isValidUser  : { method: 'POST', params: {"task" : "isValidUser"}} 
     });
 	
 }
