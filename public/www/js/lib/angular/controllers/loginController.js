@@ -11,17 +11,14 @@ function()
 
     $scope.uss_submit=function()
       {
-
-
-          loginService.tokenSSO({     "grantType"     : "password" 
-          /*loginService.authorizeSSO({     "grantType"     : "password" */
-                      ,'clientId'    :'CLIENTSP'
-                      ,'scope'       : 'GSA'
-                      ,'username'    : $scope.email
-                      ,'password'    : $scope.password
-                      ,'redirectURI' : 'http://localhost:5000/'
-
-                      },function  (resp) {
+          loginService.isValidUser(
+            {
+              "grantType": "password",
+              "clientId": "CLIENTSP",
+              "scope": "GPA",
+              "isValidUserRequest": {"isValidUserRequest":{"userDetails":{"emailId":"H1450002"}, "portalDetails":{"portalKey":"Member Portal"}}}
+            }
+            ,function  (resp) {
           // body...
           console.log($state);
           console.log(resp);
@@ -104,7 +101,7 @@ usrId: 1
             */
           
 
-            
+            /*
             $window.sessionStorage.setItem("firstName"  ,resp.logindata.loginDetails[0].firstName);
             $window.sessionStorage.setItem("grpName"    ,resp.logindata.loginDetails[0].grpName);
             $window.sessionStorage.setItem("firstName"  ,resp.logindata.loginDetails[0].firstName);
@@ -118,6 +115,7 @@ usrId: 1
 
 
           $window.sessionStorage.setItem( "treeViewJson" ,JSON.stringify(resp.entitlement));
+          */
           $state.go('dashboard');
 
 
