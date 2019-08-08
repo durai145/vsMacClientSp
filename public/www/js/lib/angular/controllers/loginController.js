@@ -11,12 +11,13 @@ function()
 
     $scope.uss_submit=function()
       {
-          loginService.isValidUser(
+          loginService.doLogin(
             {
               "grantType": "password",
               "clientId": "CLIENTSP",
               "scope": "GPA",
-              "isValidUserRequest": {"isValidUserRequest":{"userDetails":{"emailId":"H1450002"}, "portalDetails":{"portalKey":"Member Portal"}}}
+              "data" :
+               { "loginDetailsRequest":{"userDetails":{"username":"H1450002", "password" : "1qaz2wsx"}, "portalDetails":{"portalKey":"Member Portal"}}}
             }
             ,function  (resp) {
           // body...

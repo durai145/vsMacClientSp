@@ -1018,7 +1018,7 @@ serviceHandler = function (req, res) {
 					log.info("req.param:" + JSON.stringify(req.params, null, 4));
 					log.info("req.body:" + JSON.stringify(req.body, null, 4));
 					
-					var apiParamDataJson = eval(req.getParam(currentService.reqSjson[0].name));
+					var apiParamDataJson = eval(req.getParam("data"));
 					log.info("validate input");
 					log.debug("schema=" + JSON.stringify( currentService.reqSjson, null, 4));
 					log.debug("data=" + JSON.stringify( apiParamDataJson, null, 4));

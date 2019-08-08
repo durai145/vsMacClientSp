@@ -2,9 +2,9 @@ define([],function(){
 
 return ['$resource',function  ($resource) {
 	// body...
-	return $resource('/service/userDetails/:task', null,
+	return $resource('/service/loginDetails/:task', null,
     {
-        isValidUser  : { method: 'POST', params: {"task" : "isValidUser"}} 
+        doLogin  : { method: 'POST', params: {"task" : "doLogin"}} 
     });
 	
 }
