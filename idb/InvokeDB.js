@@ -24,7 +24,6 @@ var  InvokeDB = function(pageId, pageType, SchemaJson, DataJson, respSchemaJson,
 	}
 	log.info("InvokeDB:IDB.003 after");
 }
-/*
 var pageId="ServiceDetails";
 //var pageType='getServiceDetails';
 var pageType='saveServiceDetails';
@@ -58,5 +57,4 @@ try {
 	console.log(e);
 }
 console.log("calling InvokeDB:003");
-*/
 exports.InvokeDB=InvokeDB;

@@ -1015,10 +1015,13 @@ serviceHandler = function (req, res) {
 					var apiPageType = req.params.task;
 					log.info("currentService.reqSjson[0].name =" + currentService.reqSjson[0].name);
 					log.info("param =" + req.getParam(currentService.reqSjson[0].name));
-					log.info("req.param:" + JSON.stringify(req.params));
-					log.info("req.body:" + JSON.stringify(req.body));
+					log.info("req.param:" + JSON.stringify(req.params, null, 4));
+					log.info("req.body:" + JSON.stringify(req.body, null, 4));
+					
 					var apiParamDataJson = eval(req.getParam(currentService.reqSjson[0].name));
 					log.info("validate input");
+					log.debug("schema=" + JSON.stringify( currentService.reqSjson, null, 4));
+					log.debug("data=" + JSON.stringify( apiParamDataJson, null, 4));
 					err = heaeriesjson.valWithSch(currentService.reqSjson, apiParamDataJson);
 					if (err) {
 						log.error("Request has invalid format: ", err);

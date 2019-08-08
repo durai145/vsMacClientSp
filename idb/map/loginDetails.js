@@ -16,12 +16,16 @@ exports.doLogin=function(inSchema, inJson, inRespSchema, callback) {
 	//console.log("in loginDetails.doLogin");
 	//console.log(inJson);
 	//doLogin1(inJson[0].LoginDetails[0], function(err) {
-	var outJson =  [{"loginDetailsResponse":[{	"userDetails":[{"firstName" : "Duraimurugan",
+	var outJson =  {
+		"loginDetailsResponse":{	
+					"userDetails":
+							{
+							"firstName" : "Duraimurugan",
 							"lastName" : "dummy",
 							"grpName" : "role",
 							"prodVersion": "A1" ,
-							"prtlName" : "MyRoomexpense"}]
-					,"entitlement":[{"link": "test1",
+							"prtlName" : "MyRoomexpense"}
+					,"entitlement":{"link": "test1",
 							"linkName": "linkName",
 							"uid": "001",
 							"dataType": "CONTAINER",
@@ -38,15 +42,16 @@ exports.doLogin=function(inSchema, inJson, inRespSchema, callback) {
 								"dataType": "NODE",
 								"childs" : []
 								}
-							 ]}]
-			}]
-}];
+							 ]}
+			}
+};
 
-var userDetails = inJson[0].loginDetailsRequest[0].userDeatils[0];
-var portalDeatils = inJson[0].loginDetailsRequest[0].portalDeatils[0];
+var userDetails = inJson.loginDetailsRequest.userDetails;
+var portalDetails = inJson.loginDetailsRequest.portalDetails;
+log.debug("userDetails=" + JSON.stringify(userDetails, null, 4));
+log.debug("portalDetails=" + JSON.stringify(portalDetails, null, 4));
 
-console.log(JSON.stringify(inJson[0].loginDetailsRequest[0].userDeatils[0]));
-log.info("calling GPASSO_SSID003MT_Model");
+log.info("calling GPASSO_SSID003MT_Model=" + JSON.stringify(inJson, null, 4));
 GPASSO_SSID003MT_Model.findOne({"username": userDetails.username},function (err, ssid) {
 				
 				if(err) {
@@ -67,7 +72,7 @@ GPASSO_SSID003MT_Model.findOne({"username": userDetails.username},function (err,
 							return callback&&callback(new InternalServer("Interal Server"));
 						}
 						log.info("calling GPASSO_PRTL002MT_Model");							
-						GPASSO_PRTL002MT_Model.find({_id : {$in : prod.prtlIds } , prtlName: portalDeatils.portalKey}).exec(function(err,prtl) {
+						GPASSO_PRTL002MT_Model.find({_id : {$in : prod.prtlIds } , prtlName: portalDetails.portalKey}).exec(function(err,prtl) {
 						if(err) {
 							log.error("in doLogin:" , err);
 							return callback&&callback(new InternalServer("Interal Server"));
@@ -122,12 +127,12 @@ GPASSO_SSID003MT_Model.findOne({"username": userDetails.username},function (err,
 											
 										}); 
 									
-										 outJson[0].loginDetailsResponse[0].userDetails[0].lastName = ssid.lastName;
-										 outJson[0].loginDetailsResponse[0].userDetails[0].firstName = ssid.firstName;
-										 outJson[0].loginDetailsResponse[0].userDetails[0].grpName = role.roleName;
-										 outJson[0].loginDetailsResponse[0].userDetails[0].prtlName = prod.prodName + " " + prtl[0].prtlName;
-										 outJson[0].loginDetailsResponse[0].userDetails[0].prodVersion = prod.prodVersion + " " + prtl[0].prtlVersion;
-										 outJson[0].loginDetailsResponse[0].entitlement = entitlement;
+										 outJson.loginDetailsResponse.userDetails.lastName = ssid.lastName;
+										 outJson.loginDetailsResponse.userDetails.firstName = ssid.firstName;
+										 outJson.loginDetailsResponse.userDetails.grpName = role.roleName;
+										 outJson.loginDetailsResponse.userDetails.prtlName = prod.prodName + " " + prtl[0].prtlName;
+										 outJson.loginDetailsResponse.userDetails.prodVersion = prod.prodVersion + " " + prtl[0].prtlVersion;
+										 outJson.loginDetailsResponse.entitlement = entitlement;
 										return callback&&callback(  null, inRespSchema, outJson);
 									});
 								});
