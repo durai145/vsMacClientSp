@@ -17,12 +17,22 @@ function()
               "clientId": "CLIENTSP",
               "scope": "GPA",
               "data" :
-               { "loginDetailsRequest":{"userDetails":{"username":"H1450002", "password" : "1qaz2wsx"}, "portalDetails":{"portalKey":"Member Portal"}}}
+               { "loginDetailsRequest":{"userDetails":
+                {
+                  "username": $scope.email,
+                  "password" : $scope.password
+                }, 
+                "portalDetails":
+                    {
+                        "portalKey":"Member Portal"
+                      }
+                  }
+              }
             }
             ,function  (resp) {
           // body...
           console.log($state);
-          console.log(resp);
+          console.log(JSON.stringify(resp, null, 4));
             
 
 
@@ -102,21 +112,21 @@ usrId: 1
             */
           
 
-            /*
-            $window.sessionStorage.setItem("firstName"  ,resp.logindata.loginDetails[0].firstName);
-            $window.sessionStorage.setItem("grpName"    ,resp.logindata.loginDetails[0].grpName);
-            $window.sessionStorage.setItem("firstName"  ,resp.logindata.loginDetails[0].firstName);
-            $window.sessionStorage.setItem("lastName"   ,resp.logindata.loginDetails[0].lastName);
-            $window.sessionStorage.setItem("prodVersion",resp.logindata.loginDetails[0].prodVersion);
-            $window.sessionStorage.setItem("prtlName"   ,resp.logindata.loginDetails[0].prtlName);
-            $window.sessionStorage.setItem("prodName"   ,resp.logindata.loginDetails[0].prodName);
-            $window.sessionStorage.setItem("usrId"      ,resp.logindata.loginDetails[0].usrId);
-            $window.sessionStorage.setItem("grpId"      ,resp.logindata.loginDetails[0].grpId);
+            
+            $window.sessionStorage.setItem("firstName"  ,resp.loginDetailsResponse.userDetails.firstName);
+            $window.sessionStorage.setItem("grpName"    ,resp.loginDetailsResponse.userDetails.grpName);
+            $window.sessionStorage.setItem("firstName"  ,resp.loginDetailsResponse.userDetails.firstName);
+            $window.sessionStorage.setItem("lastName"   ,resp.loginDetailsResponse.userDetails.lastName);
+            $window.sessionStorage.setItem("prodVersion",resp.loginDetailsResponse.userDetails.prodVersion);
+            $window.sessionStorage.setItem("prtlName"   ,resp.loginDetailsResponse.userDetails.prtlName);
+            $window.sessionStorage.setItem("prodName"   ,resp.loginDetailsResponse.userDetails.prodName);
+            $window.sessionStorage.setItem("usrId"      ,resp.loginDetailsResponse.userDetails.usrId);
+            $window.sessionStorage.setItem("grpId"      ,resp.loginDetailsResponse.userDetails.grpId);
           
 
 
           $window.sessionStorage.setItem( "treeViewJson" ,JSON.stringify(resp.entitlement));
-          */
+          
           $state.go('dashboard');
 
 

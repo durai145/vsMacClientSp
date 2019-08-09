@@ -166,7 +166,7 @@ $scope.$watch('$viewContentLoaded', function(){
 
 
 
-GenTreeView(eval($window.sessionStorage.getItem("treeViewJson")), 'dashboard');
+//GenTreeView(eval($window.sessionStorage.getItem("treeViewJson")), 'dashboard');
   
 });
     
@@ -192,7 +192,7 @@ createTreeView =function(jsonInput, parent)
   var rtDiv = document.createElement("div")
 
  // var child= document.createElement("div")
-
+ jsonInput= jsonInput || [];
 
    for(var i=0; i< jsonInput.length; i++)
     {

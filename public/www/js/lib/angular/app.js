@@ -1216,88 +1216,44 @@ $stateProvider.state('basicDetUSSEdit',
                                   ){  
     var sessionRecoverer = {
         responseError: function(response) {
-            // Session has expired
-
-               console.log(response);
-            if (response.status == 302){
-
+          // session expired 
+            if (response.status == 302) {
                 $window.sessionStorage.clear();
-                //var SessionService = $injector.get('SessionService');
                 var $http = $injector.get('$http');
                 var deferred = $q.defer();
                 toaster.pop('error','this', 'session is expired');
-
-             //   uss.Test('Test');
-                // Create a new session (recover the session)
-                // We use login method that logs the user in using the current credentials and
-                // returns a promise
-                //SessionService.login().then(deferred.resolve, deferred.reject);
-
-                // When the session recovered, make the same backend call again and chain the request
-
                 $injector.get('$state').go('login');
 
                 return deferred.promise.then(function() {
                     return $http(response.config);
                 });
-            }
-            else if (response.status == 304){
-
+            } else if (response.status == 304) {
                 $window.sessionStorage.clear();
-                //var SessionService = $injector.get('SessionService');
                 var $http = $injector.get('$http');
                 var deferred = $q.defer();
                 toaster.pop('error','Error:', 'Invalid User Id / Password');
-
-             //   uss.Test('Test');
-                // Create a new session (recover the session)
-                // We use login method that logs the user in using the current credentials and
-                // returns a promise
-                //SessionService.login().then(deferred.resolve, deferred.reject);
-
-                // When the session recovered, make the same backend call again and chain the request
-
                 $injector.get('$state').go('login');
 
                 return deferred.promise.then(function() {
                     return $http(response.config);
                 });
-            }
-            else if(response.status == 404)
-            {
+            } else if(response.status == 404) {
                 toaster.pop('error','404', 'Request services is not avaliable for You');
                 $injector.get('$state').go('login');
-            }
-            return $q.reject(response);
+                return $http(response.config);
+              }
+            return $q.resolve(response);
         }
         ,response: function(response) {
-            var deferred = $q.defer();
-
-             // console.log('response');
-              //console.log(response);
-
-            
-
-              var respJSON=JSON.stringify(response);
-
-              // alert("success["+ respJSON + "]" );
-              
-                //toaster.pop('success','200', 'Success response [' + response.headers('x-access-token') +"]");
-
                    var accessToken= response.headers('x-access-token');
-
-                  // alert('accessToken:' + accessToken);
-                   if (angular.isDefined(accessToken))
-                   {
-                      if( accessToken != null)
-                      {
+                   if (angular.isDefined(accessToken)) {
+                      if( accessToken != null) {
                         $window.sessionStorage.accessToken=accessToken;
                       }
                   }
                 return response;
-
-            }
-            ,request: function(request) {
+            },
+            request: function(request) {
            
                    console.log('request');
               console.log(request);
