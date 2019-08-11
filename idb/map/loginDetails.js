@@ -86,8 +86,7 @@ GPASSO_SSID003MT_Model.findOne({"username": userDetails.username},function (err,
 							prtl.forEach(function(prtlObj) {
 									prtlObj.roleIds.forEach(function(roleId) { roleIds.push(roleId); });
 							});
-							
-						//	console.log("roleIds:" , roleIds);
+
 								GPASSO_ROLE003MT_Model.findOne({ _id: {$in : roleIds } , usrIds : {$in : [ssid._id]}}).populate("pageGrpIds").exec(function(err, role) {
 									if(err) {
 										log.error("in doLogin:" , err);

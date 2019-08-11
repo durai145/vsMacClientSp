@@ -24,7 +24,7 @@ function()
                 }, 
                 "portalDetails":
                     {
-                        "portalKey":"Member Portal"
+                        "portalKey": $scope.portalKey
                       }
                   }
               }
