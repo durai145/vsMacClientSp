@@ -96,8 +96,12 @@ function createFolder(dir) {
 	}, initDir);
 }
 
+function getModelName(schemaName, tableName) {
+	return ClassCamleCase(schemaName + "_" + tableName);
+}
+
 function preparJavaObj(tableObj) {
-	var modelName = ClassCamleCase(tableObj.schemaName + "_" + tableObj.tableName);
+	var modelName = getModelName(tableObj.schemaName, tableObj.tableName);
 	base = "com.heaerie.gpasso.gpa.pojo";
 	basePath = "/Users/durai/Documents/workspace/gpa/src/main/java";
 
@@ -146,10 +150,18 @@ function preparJavaObj(tableObj) {
 				}
 			} else {
 				if (column.ReferanceKey == "Y") {
-					javaFileClass += util.format("\t%s  %s  %s \n ", column.Type, camleCase(column.Name), conj);
+					//org.springframework.data.mongodb.core.mapping.DBRef
+					//java.util.List
+					checkAndAdd("org.springframework.data.mongodb.core.mapping.DBRef", packageImportList);
+					checkAndAdd("java.util.List", packageImportList);
+					column.Type = util.format("List<%s>", getModelName(column.ParantSchema, column.ParantTable));
+					javaFileClass += util.format("\t@DBRef\n\t%s %s  %s \n ", column.Type, camleCase(column.Name), conj);
+					
+					//conj, getModelName(tableObj.ParantSchema, tableObj.ParantTable);column.Name, column.ParantSchema, column.ParantTable
 				} else {
 					javaFileClass += util.format("\t%s  %s  %s  \n", column.Type, camleCase(column.Name), conj);
 				}
+
 			}
 		}
 
@@ -249,7 +261,7 @@ function prepareMongoosObj(tableObj) {
 	console.log(" var %s_Model = mongoose.model('%s', %s); ", modelName, modelName, modelName);
 	console.log(" module.exports.%s_Model = %s_Model; \n ", modelName, modelName);
 }
-parseSQL = function (data) {
+parseSQL = function (data) {2
 	var sqlObj = new Array();
 	var pureData = removeCommet(data);
 	var stmts = pureData.split(";");
