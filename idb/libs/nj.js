@@ -95,7 +95,9 @@ function createFolder(dir) {
 		return curDir;
 	}, initDir);
 }
-
+prepareToString = function(column, joinStr) {
+	return util.format("\n\t\t\t\"%s%s=\" + %s + ", joinStr, camleCase(column.Name), camleCase(column.Name));
+}
 function getModelName(schemaName, tableName) {
 	return ClassCamleCase(schemaName + "_" + tableName);
 }
@@ -129,6 +131,8 @@ function preparJavaObj(tableObj) {
 	javaFileClass += util.format("public class  %s {\n", modelName);
 	getterAndSender = "";
 	var conj = ";";
+	var joinStr="";
+	toString= util.format("\t@Override\n\tpublic String toString() {\n\treturn \"%s={\" + ", modelName);
 	tableObj.fields.columns.forEach(function (column) {
 		//column.Name=camleCase(column.Name);
 
@@ -139,7 +143,7 @@ function preparJavaObj(tableObj) {
 		if (column.Type == "ObjectId") {
 			checkAndAdd("org.bson.types.ObjectId", packageImportList);
 		}
-		if (column.Name != "_id") {
+		if (column.Name != "_ID") {
 			if (column.ForigenKeyName == "") {
 				if (column.Dflt == 'CURRENT_TIMESTAMP') {
 					javaFileClass += util.format("\t%s  %s  %s \n ", column.Type, camleCase(column.Name), conj);
@@ -163,14 +167,23 @@ function preparJavaObj(tableObj) {
 				}
 
 			}
+		} else {
+			column.Name="Id"
+			checkAndAdd("org.springframework.data.annotation.Id", packageImportList);
+			javaFileClass += util.format("\t@Id\n\t%s  %s  %s  \n", column.Type, camleCase(column.Name), conj);
 		}
 
 		getterAndSender += prepareGetterAndSetter(column);
 
-	});
-	javaFileClass += util.format(getterAndSender);
+		toString += prepareToString(column, joinStr);
+		joinStr=",";
 
-	javaFileClass += util.format("}")
+	});
+	toString +="\n\t\t\"}\";";
+	toString +="\n\t}";
+	javaFileClass += util.format(getterAndSender);
+	javaFileClass += util.format(toString)
+	javaFileClass += util.format("\n}")
 	javaFile += util.format("%s \n%s", listToImportStr(packageImportList), javaFileClass);
 
 	createFile(basePathFile, javaFile);
