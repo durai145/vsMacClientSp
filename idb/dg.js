@@ -126,7 +126,7 @@ DataSetup = function (callback) {
 			page.save(function (err) {
 				if (err) {
 					callback && callback(err, {
-						"status": "Unable to save ssid : [" + ssid + "]"
+						tr"status": "Unable to save ssid : [" + ssid + "]"
 					});
 				}
 
