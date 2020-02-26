@@ -95,9 +95,10 @@ function createFolder(dir) {
 		return curDir;
 	}, initDir);
 }
-prepareToString = function(column, joinStr) {
+prepareToString = function (column, joinStr) {
 	return util.format("\n\t\t\t\"%s%s=\" + %s + ", joinStr, camleCase(column.Name), camleCase(column.Name));
 }
+
 function getModelName(schemaName, tableName) {
 	return ClassCamleCase(schemaName + "_" + tableName);
 }
@@ -105,7 +106,7 @@ function getModelName(schemaName, tableName) {
 function preparJavaObj(tableObj) {
 	var modelName = getModelName(tableObj.schemaName, tableObj.tableName);
 	base = "com.heaerie.gpasso.gpa.pojo";
-	basePath = "/Users/durai/Documents/workspace/gpa/src/main/java";
+	basePath = "/Users/durai/workspace/gpa/src/main/java";
 
 	packagePath = basePath + "/" + base.replace(/\./g, '\/');
 
@@ -131,17 +132,22 @@ function preparJavaObj(tableObj) {
 	javaFileClass += util.format("public class  %s {\n", modelName);
 	getterAndSender = "";
 	var conj = ";";
-	var joinStr="";
-	toString= util.format("\t@Override\n\tpublic String toString() {\n\treturn \"%s={\" + ", modelName);
+	var joinStr = "";
+	toString = util.format("\t@Override\n\tpublic String toString() {\n\treturn \"%s={\" + ", modelName);
 	tableObj.fields.columns.forEach(function (column) {
 		//column.Name=camleCase(column.Name);
 
-		column.Type = convertToJavaType(column.Type);
+		column.Type = convertToJavaType(column);
 		if (column.Type == "Date") {
 			checkAndAdd("java.util.Date", packageImportList);
 		}
 		if (column.Type == "ObjectId") {
 			checkAndAdd("org.bson.types.ObjectId", packageImportList);
+		}
+
+		if (column.Type == "UssSchema") {
+			checkAndAdd("com.heaerie.uss.pojo.UssSchema", packageImportList);
+			column.Type = util.format("List<%s>", "UssSchema");
 		}
 		if (column.Name != "_ID") {
 			if (column.ForigenKeyName == "") {
@@ -160,7 +166,7 @@ function preparJavaObj(tableObj) {
 					checkAndAdd("java.util.List", packageImportList);
 					column.Type = util.format("List<%s>", getModelName(column.ParantSchema, column.ParantTable));
 					javaFileClass += util.format("\t@DBRef\n\t%s %s  %s \n ", column.Type, camleCase(column.Name), conj);
-					
+
 					//conj, getModelName(tableObj.ParantSchema, tableObj.ParantTable);column.Name, column.ParantSchema, column.ParantTable
 				} else {
 					javaFileClass += util.format("\t%s  %s  %s  \n", column.Type, camleCase(column.Name), conj);
@@ -168,7 +174,7 @@ function preparJavaObj(tableObj) {
 
 			}
 		} else {
-			column.Name="Id"
+			column.Name = "Id"
 			checkAndAdd("org.springframework.data.annotation.Id", packageImportList);
 			javaFileClass += util.format("\t@Id\n\t%s  %s  %s  \n", column.Type, camleCase(column.Name), conj);
 		}
@@ -176,11 +182,11 @@ function preparJavaObj(tableObj) {
 		getterAndSender += prepareGetterAndSetter(column);
 
 		toString += prepareToString(column, joinStr);
-		joinStr=",";
+		joinStr = ",";
 
 	});
-	toString +="\n\t\t\"}\";";
-	toString +="\n\t}";
+	toString += "\n\t\t\"}\";";
+	toString += "\n\t}";
 	javaFileClass += util.format(getterAndSender);
 	javaFileClass += util.format(toString)
 	javaFileClass += util.format("\n}")
@@ -214,16 +220,23 @@ function prepareGetterAndSetter(column) {
 	return outStr;
 }
 
-function convertToJavaType(type) {
-	if (type == "Schema.ObjectId") {
+function convertToJavaType(column) {
+	if (column.Type == "Schema.ObjectId") {
 		return "ObjectId";
 	}
-	return type;
+
+	if (column.Size == 100) {
+		return "UssSchema";
+	}
+
+	return column.Type;
 }
 
 function listToImportStr(list) {
-	rtStr= ""
-	list.forEach(function (elm) { rtStr += util.format('import  %s; \n' , elm); });
+	rtStr = ""
+	list.forEach(function (elm) {
+		rtStr += util.format('import  %s; \n', elm);
+	});
 	return rtStr;
 }
 
@@ -274,7 +287,7 @@ function prepareMongoosObj(tableObj) {
 	console.log(" var %s_Model = mongoose.model('%s', %s); ", modelName, modelName, modelName);
 	console.log(" module.exports.%s_Model = %s_Model; \n ", modelName, modelName);
 }
-parseSQL = function (data) {2
+parseSQL = function (data) {
 	var sqlObj = new Array();
 	var pureData = removeCommet(data);
 	var stmts = pureData.split(";");
@@ -468,23 +481,25 @@ parseTableField = function (tableFieldStmt) {
 			columnName = columLineArr[col++];
 			columnName = columnName.replace(/`/g, "");
 			columnType = columLineArr[col++];
+
+			columnSize = getSizeFromDataType(columnType);
 			columnTypeArr = columnType.split("(");
 			if (columnTypeArr.length > 1) {
 				columnType = columnTypeArr[0];
 			}
 
 			if (columnType == "VARCHAR") {
-				columnType = "String"
+				columnType = "String";
 			} else if (columnType == "INT") {
-				columnType = "Number"
+				columnType = "Number";
 			} else if (columnType == "DATETIME") {
-				columnType = "Date"
+				columnType = "Date";
 			} else if (columnType == "DATE") {
-				columnType = "Date"
+				columnType = "Date";
 			} else if (columnType == "DOUBLE") {
-				columnType = "Number"
+				columnType = "Number";
 			} else {
-				columnType = "String"
+				columnType = "String";
 			}
 
 			if (columnName == "_ID") {
@@ -512,6 +527,7 @@ parseTableField = function (tableFieldStmt) {
 			columnList.push({
 				"Name": columnName,
 				"Type": columnType,
+				"Size": columnSize,
 				"Reqd": columnReqd,
 				"Dflt": columnDflt,
 				"Unique": columnUnique,
@@ -533,6 +549,18 @@ parseTableField = function (tableFieldStmt) {
 
 }
 
+function getSizeFromDataType(dataTypeStr) {
+	if (undefined != dataTypeStr) {
+		start = dataTypeStr.indexOf("(");
+		if (start > 0) {
+			end = dataTypeStr.indexOf(")");
+			if (end > 0) {
+				return parseInt(dataTypeStr.substr(start + 1, end - (start + 1)));
+			}
+		}
+	}
+	return 0;
+}
 parseFieldSplit = function (tableFieldStmt, chr) {
 	tableFieldStmt = tableFieldStmt + chr;
 	var tableFieldStmt = tableFieldStmt.split("");
