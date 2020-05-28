@@ -1,2 +1,0 @@
-# ubuntuUss12
-# clientsp
